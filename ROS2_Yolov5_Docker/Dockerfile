@@ -1,7 +1,7 @@
 FROM shaderobotics/ros:foxy-cudnn
 
 # create a basic workspace
-RUN ["/bin/bash", "-c", "mkdir -p /app/shade_ws/src"]
+RUN ["/bin/bash", "-c", "mkdir -p /app/kime_ws"]
 WORKDIR /app/kime_ws
 
 # install some basic tools
