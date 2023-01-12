@@ -41,6 +41,7 @@ alias donoetic=" \
 	export ROS_MASTER_URI=http://localhost:11311; \
 	export ROS_PORT_SIM=11311; \
 	echo 'Activate noetic!' \
+	"
 
 
 #alias dofoxy='source /opt/ros/foxy/setup.bash; source ~/robot_ws/install/local_setup.bash; echo "Activate foxy!"'
