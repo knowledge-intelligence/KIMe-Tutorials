@@ -5,7 +5,7 @@ git clone https://github.com/reiniscimurs/DRL-robot-navigation
 
 
 ## ROS1 Build
-cd ~/DRL-robot-navigation/catkin_ws
+cd ~/DRL-robot-navigation/catkin_ws <br>
 catkin_make_isolated
 
 
