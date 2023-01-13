@@ -29,7 +29,7 @@ $ docker run --rm -it --entrypoint bash <image-name-or-id>
 
 ## (to enter a running container)
 (-it 컨테이너를 종료하지 않고, 터미널의 입력을 계속해서 컨테이너로 전달하기 위해서 사용) <br>
-$ docker exec -it <container-name-or-id> bash
+$ docker exec -it \<container-name-or-id\> bash
 
 ## (Run Out_Docker Nodes - Publisher)
 $ source ~/robot_ws/install/setup.bash <br>
