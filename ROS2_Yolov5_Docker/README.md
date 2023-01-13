@@ -14,17 +14,17 @@ $ wget https://raw.githubusercontent.com/knowledge-intelligence/ROS-Tutorials/ma
 $ git clone https://github.com/knowledge-intelligence/ROS-Tutorials.git -b main
 
 ## (Docker Build)
-$ sudo docker build . –t yolov5
+$ sudo docker build . -t yolov5
 
 ## (Docker Run)
-$ sudo docker run –t yolov5
+$ sudo docker run -t yolov5
 
 ## (remove all containers)
 $ sudo docker rm $(sudo docker ps -a -q)
 
 ## (To run a disposable new container / run it without --rm for no disposable)
 (--rm 옵션, 일회성으로 실행) <br>
-$ docker run --rm -it --entrypoint bash <image-name-or-id>
+$ docker run --rm -it --entrypoint bash \<image-name-or-id\>
 
 
 ## (to enter a running container)
