@@ -27,33 +27,33 @@ pip3 install squaternion
 
 
 ## ROS1 & Gazebo Setting
-export ROS_HOSTNAME=localhost
-export ROS_MASTER_URI=http://localhost:11311
-export ROS_PORT_SIM=11311
-export GAZEBO_RESOURCE_PATH=~/DRL-robot-navigation/catkin_ws/src/multi_robot_scenario/launch
-source ~/.bashrc
-cd ~/DRL-robot-navigation/catkin_ws
-source devel_isolated/setup.bash
+export ROS_HOSTNAME=localhost <br>
+export ROS_MASTER_URI=http://localhost:11311 <br>
+export ROS_PORT_SIM=11311 <br>
+export GAZEBO_RESOURCE_PATH=~/DRL-robot-navigation/catkin_ws/src/multi_robot_scenario/launch <br>
+source ~/.bashrc <br>
+cd ~/DRL-robot-navigation/catkin_ws <br>
+source devel_isolated/setup.bash <br>
 
 
 ## Run Code
-cd ~/DRL-robot-navigation/TD3
+cd ~/DRL-robot-navigation/TD3 <br>
 python3 train_velodyne_td3.py
 
 ## Tensorboard
-cd ~/DRL-robot-navigation/TD3
+cd ~/DRL-robot-navigation/TD3 <br>
 tensorboard --logdir 'runs'
 
 
 
 ## Run Gazebo Client to see the simulation
-source /usr/share/gazebo/setup.sh
-gzclient
+source /usr/share/gazebo/setup.sh <br>
+gzclient <br>
 % (or Check roslaunch setting to see Gazebo simulation client)
 
 ## Check Gazebo Run
 gazebo --verbose
 
 ## Kill Gazebo
-killall gzserver
+killall gzserver <br>
 killall rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient python python3
