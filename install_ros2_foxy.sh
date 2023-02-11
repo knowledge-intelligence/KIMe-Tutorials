@@ -81,17 +81,17 @@ colcon build --symlink-install
 
 
 echo "[Setting the ROS evironment]"
-sh -c "echo \"alias dofoxy='source /opt/ros/${name_ros2_distro}/setup.bash; source ~/${name_ws}/install/local_setup.bash; echo Activate foxy!'\" >> ~/.bashrc"
+sh -c "echo \"alias dofoxy='source /opt/ros/${name_ros2_distro}/setup.bash; echo \"Activate foxy!\"'\" >> ~/.bashrc"
 
 # sh -c "echo \"source /opt/ros/${name_ros2_distro}/setup.bash\" >> ~/.bashrc"
 # sh -c "echo \"source ~/${name_ws}/install/local_setup.bash\" >> ~/.bashrc"
-sh -c "echo \"source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\" >> ~/.bashrc"
-sh -c "echo \"source /usr/share/vcstool-completion/vcs.bash\" >> ~/.bashrc"
-sh -c "echo \"source /usr/share/colcon_cd/function/colcon_cd.sh\" >> ~/.bashrc"
+# sh -c "echo \"source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash\" >> ~/.bashrc"
+# sh -c "echo \"source /usr/share/vcstool-completion/vcs.bash\" >> ~/.bashrc"
+# sh -c "echo \"source /usr/share/colcon_cd/function/colcon_cd.sh\" >> ~/.bashrc"
 
 sh -c "echo \"export _colcon_cd_root=~/${name_ws}\" >> ~/.bashrc"
 
-sh -c "echo \"export ROS_DOMAIN_ID=7\" >> ~/.bashrc"
+sh -c "echo \"export ROS_DOMAIN_ID=1\" >> ~/.bashrc"
 sh -c "echo \"export ROS_NAMESPACE=robot1\" >> ~/.bashrc"
 
 sh -c "echo \"export RMW_IMPLEMENTATION=rmw_fastrtps_cpp\" >> ~/.bashrc"
@@ -100,47 +100,11 @@ sh -c "echo \"export RMW_IMPLEMENTATION=rmw_fastrtps_cpp\" >> ~/.bashrc"
 # export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # export RMW_IMPLEMENTATION=rmw_gurumdds_cpp
 
-
-
-
-
 # export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity} {time}] [{name}]: {message} ({function_name}() at {file_name}:{line_number})'
 sh -c "echo \"export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity}]: {message}'\" >> ~/.bashrc"
 sh -c "echo \"export RCUTILS_COLORIZED_OUTPUT=1\" >> ~/.bashrc"
 sh -c "echo \"export RCUTILS_LOGGING_USE_STDOUT=0\" >> ~/.bashrc"
 sh -c "echo \"export RCUTILS_LOGGING_BUFFERED_STREAM=1\" >> ~/.bashrc"
-
-
-
-sh -c "echo \"alias cw='cd ~/${name_ws}'\" >> ~/.bashrc"
-sh -c "echo \"alias cs='cd ~/${name_ws}/src'\" >> ~/.bashrc"
-sh -c "echo \"alias ccd='colcon_cd'\" >> ~/.bashrc"
-
-
-sh -c "echo \"alias cb='cd ~/${name_ws} && colcon build --symlink-install'\" >> ~/.bashrc"
-sh -c "echo \"alias cbs='colcon build --symlink-install'\" >> ~/.bashrc"
-sh -c "echo \"alias cbp='colcon build --symlink-install --packages-select'\" >> ~/.bashrc"
-sh -c "echo \"alias cbu='colcon build --symlink-install --packages-up-to'\" >> ~/.bashrc"
-sh -c "echo \"alias ct='colcon test'\" >> ~/.bashrc"
-sh -c "echo \"alias ctp='colcon test --packages-select'\" >> ~/.bashrc"
-sh -c "echo \"alias ctr='colcon test-result'\" >> ~/.bashrc"
-
-
-sh -c "echo \"alias rt='ros2 topic list'\" >> ~/.bashrc"
-sh -c "echo \"alias re='ros2 topic echo'\" >> ~/.bashrc"
-sh -c "echo \"alias rn='ros2 node list'\" >> ~/.bashrc"
-
-sh -c "echo \"alias killgazebo='killall -9 gazebo & killall -9 gzserver  & killall -9 gzclient'\" >> ~/.bashrc"
-
-
-sh -c "echo \"alias af='ament_flake8'\" >> ~/.bashrc"
-sh -c "echo \"alias ac='ament_cpplint'\" >> ~/.bashrc"
-
-
-sh -c "echo \"alias testpub='ros2 run demo_nodes_cpp talker'\" >> ~/.bashrc"
-sh -c "echo \"alias testsub='ros2 run demo_nodes_cpp listener'\" >> ~/.bashrc"
-sh -c "echo \"alias testpubimg='ros2 run image_tools cam2image'\" >> ~/.bashrc"
-sh -c "echo \"alias testsubimg='ros2 run image_tools showimage'\" >> ~/.bashrc"
 
 
 echo "[Complete!!!]"
