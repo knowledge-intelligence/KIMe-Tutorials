@@ -51,8 +51,10 @@ cd ~/$name_catkinws/
 catkin_make
 
 echo "[Setting the ROS evironment]"
-sh -c "echo \"source /opt/ros/$name_ros_distro/setup.bash\" >> ~/.bashrc"
-sh -c "echo \"source ~/$name_catkinws/devel/setup.bash\" >> ~/.bashrc"
+# sh -c "echo \"source /opt/ros/$name_ros_distro/setup.bash\" >> ~/.bashrc"
+sh -c "echo \"alias donoetic='source /opt/ros/${name_ros_distro}/setup.bash; echo \"Activate noetic!\"'\" >> ~/.bashrc"
+
+# sh -c "echo \"source ~/$name_catkinws/devel/setup.bash\" >> ~/.bashrc"
 sh -c "echo \"export ROS_MASTER_URI=http://localhost:11311\" >> ~/.bashrc"
 sh -c "echo \"export ROS_HOSTNAME=localhost\" >> ~/.bashrc"
 
