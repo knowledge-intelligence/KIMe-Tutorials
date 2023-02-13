@@ -17,7 +17,8 @@ $ git clone https://github.com/knowledge-intelligence/ROS-Tutorials.git -b main
 $ sudo docker build . -t yolov5
 
 ## (Docker Run)
-$ sudo docker run -t yolov5
+$ sudo docker run -it yolov5 --name yolov5_docker <br>
+[참고] https://www.daleseo.com/docker-run/
 
 ## (remove all containers)
 $ sudo docker rm $(sudo docker ps -a -q)
