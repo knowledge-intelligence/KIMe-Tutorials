@@ -34,4 +34,4 @@ COPY ./In_Docker/yolov5s.pt /app/kime_ws/
 RUN colcon build
 
 # begin the node
-ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
+ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=1 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
