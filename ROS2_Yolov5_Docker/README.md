@@ -15,6 +15,7 @@ $ git clone https://github.com/knowledge-intelligence/ROS-Tutorials.git -b main
 
 ## (Docker Build)
 $ sudo docker build . -t yolov5
+$ sudo docker build -f Dockerfile_CPU . -t yolov5_cpu
 
 ## (Docker Run)
 $ sudo docker run -it yolov5 --name yolov5_docker <br>
