@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "setup_python_env",
+            "type": "shell",
+            "linux": {
+                "command": "export CARB_APP_PATH=${workspaceFolder}/kit && export ISAAC_PATH=${workspaceFolder} && export EXP_PATH=${workspaceFolder}/apps && source ${workspaceFolder}/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.standalone_examples.env"
+            },
+            "windows": {
+                "command": "set CARB_APP_PATH=${workspaceFolder}\\kit && set ISAAC_PATH=${workspaceFolder} && set EXP_PATH=${workspaceFolder}\\apps && ${workspaceFolder}\\setup_python_env.bat && set >${workspaceFolder}\\.vscode\\.standalone_examples.env"
+            }
+        }
+    ]
+}
