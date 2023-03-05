@@ -1,7 +1,29 @@
 # Nvidia Isaac Sim - Tutorials
 Isaac Sim - related Tutorials
 
+## Fix .VSCode json
+- in launch.json (Change)
+```json
+"python": "${workspaceFolder}/kit/python/bin/python3",   
+"envFile": "${workspaceFolder}/.vscode/.standalone_examples.env",   
 
+==>
+
+"python": "${workspaceFolder}\\kit\\python\\python.exe",   
+"envFile": "${workspaceFolder}\\.vscode\\.standalone_examples.env",
+```
+
+- in settings.json (Add)
+```json
+"python.defaultInterpreterPath": "${workspaceFolder}\\kit\\python\\python.exe",
+```
+
+- in tasks.json (Add)
+```json
+"windows": {
+	"command": "set CARB_APP_PATH=${workspaceFolder}\\kit && set ISAAC_PATH=${workspaceFolder} && set EXP_PATH=${workspaceFolder}\\apps && ${workspaceFolder}\\setup_python_env.bat && set >${workspaceFolder}\\.vscode\\.standalone_examples.env"
+}
+```
 
 ## Set Default Terminal
 1. Open Visual Studio Code
@@ -24,32 +46,4 @@ _viewport_legacy.cp37-win_amd64.lib ==to==> _viewport_legacy.cp37_win_amd64.lib
 - in the scripts\viewport.py
 ```python
 from .._viewport_legacy import \* ==to==> from .._viewport_legacy.cp37_win_amd64 import \*
-```
-
-
-## Fix .VSCode json
-- in launch.json   
-changing...
-```json
-"python": "${workspaceFolder}/kit/python/bin/python3",   
-"envFile": "${workspaceFolder}/.vscode/.standalone_examples.env",   
-```   
-==>   
-```json   
-"python": "${workspaceFolder}\\kit\\python\\python.exe",   
-"envFile": "${workspaceFolder}\\.vscode\\.standalone_examples.env",
-```
-
-- in settings.json   
-adding...
-```json
-"python.defaultInterpreterPath": "${workspaceFolder}\\kit\\python\\python.exe",
-```
-
-- in tasks.json   
-adding...    
-```json
-"windows": {
-	"command": "set CARB_APP_PATH=${workspaceFolder}\\kit && set ISAAC_PATH=${workspaceFolder} && set EXP_PATH=${workspaceFolder}\\apps && ${workspaceFolder}\\setup_python_env.bat && set >${workspaceFolder}\\.vscode\\.standalone_examples.env"
-}
 ```
