@@ -15,32 +15,41 @@ Isaac Sim - related Tutorials
 https://forums.developer.nvidia.com/t/runtimeerror-failed-to-acquire-interface-omni-iviewport-pluginname-nullptr/240671/9
 
 
-- in the folder   
-'''_viewport_legacy.cp37-win_amd64.pyd ==to==> _viewport_legacy.cp37_win_amd64.pyd 
-_viewport_legacy.cp37-win_amd64.lib ==to==> _viewport_legacy.cp37_win_amd64.lib'''
+- in the folder
+```
+_viewport_legacy.cp37-win_amd64.pyd ==to==> _viewport_legacy.cp37_win_amd64.pyd 
+_viewport_legacy.cp37-win_amd64.lib ==to==> _viewport_legacy.cp37_win_amd64.lib
+```
 
-- in the scripts\viewport.py   
-'''from .._viewport_legacy import \* ==to==> from .._viewport_legacy.cp37_win_amd64 import \*'''
+- in the scripts\viewport.py
+```python
+from .._viewport_legacy import \* ==to==> from .._viewport_legacy.cp37_win_amd64 import \*
+```
 
 
 ## Fix .VSCode json
 - in launch.json   
-changing...    
-'''"python": "${workspaceFolder}/kit/python/bin/python3",   
+changing...
+```json
+"python": "${workspaceFolder}/kit/python/bin/python3",   
 "envFile": "${workspaceFolder}/.vscode/.standalone_examples.env",   
-   
+```   
 ==>   
-   
+```json   
 "python": "${workspaceFolder}\\kit\\python\\python.exe",   
-"envFile": "${workspaceFolder}\\.vscode\\.standalone_examples.env",'''
-
+"envFile": "${workspaceFolder}\\.vscode\\.standalone_examples.env",
+```
 
 - in settings.json   
-adding...    
-'''"python.defaultInterpreterPath": "${workspaceFolder}\\kit\\python\\python.exe",'''
+adding...
+```json
+"python.defaultInterpreterPath": "${workspaceFolder}\\kit\\python\\python.exe",
+```
 
 - in tasks.json   
 adding...    
-'''"windows": {
+```json
+"windows": {
 	"command": "set CARB_APP_PATH=${workspaceFolder}\\kit && set ISAAC_PATH=${workspaceFolder} && set EXP_PATH=${workspaceFolder}\\apps && ${workspaceFolder}\\setup_python_env.bat && set >${workspaceFolder}\\.vscode\\.standalone_examples.env"
-}'''
+}
+```
