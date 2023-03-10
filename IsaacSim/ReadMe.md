@@ -36,6 +36,9 @@ Isaac Sim - related Tutorials
 [RuntimeError: Failed to acquire interface: omni::kit::IViewport (pluginName: nullptr)]   
 https://forums.developer.nvidia.com/t/runtimeerror-failed-to-acquire-interface-omni-iviewport-pluginname-nullptr/240671/9
 
+[Path]   
+C:\Users\<Your Username here>\AppData\Local\ov\pkg\isaac_sim-2022.2.0\kit\extscore\omni.kit.window.viewport\omni\kit\viewport_legacy  
+
 
 - in the folder
 ```
