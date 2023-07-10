@@ -1,0 +1,10 @@
+{
+	"settings": {
+		"python.pythonPath": "C:\\Users\\USER\\.conda\\envs\\SoftSensors\\python.exe",		
+	},
+	"folders": [
+		{
+			"path": "."
+		}
+	]
+}
