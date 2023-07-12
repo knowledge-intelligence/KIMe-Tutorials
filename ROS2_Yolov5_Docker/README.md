@@ -2,15 +2,15 @@
 
 
 ## (Install ROS2 Foxy)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/ROS-Tutorials/master/install_ros2_foxy.sh && chmod 755 ./install_ros2_foxy.sh && ./install_ros2_foxy.sh
+$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_foxy.sh && chmod 755 ./install_ros2_foxy.sh && ./install_ros2_foxy.sh
 
 
 ## (Install Docker)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/ROS-Tutorials/master/install_docker.sh && chmod 755 ./install_docker.sh && ./install_docker.sh
+$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_docker.sh && chmod 755 ./install_docker.sh && ./install_docker.sh
 
 
 ## (git clone)
-$ git clone https://github.com/knowledge-intelligence/ROS-Tutorials.git -b main
+$ git clone https://github.com/knowledge-intelligence/KIMe-Tutorials.git -b main
 
 
 ## (Docker Build)
