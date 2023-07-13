@@ -27,7 +27,8 @@ RUN apt-get update && \
 # Utilize pip to install any required python dependencies
 RUN pip3 install --upgrade pip
 #RUN python3 -m pip install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
-RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
+#RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
+RUN pip3 install -U ultralytics
 
 COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
 COPY ./In_Docker/yolov5s.pt /app/kime_ws/
