@@ -28,9 +28,8 @@ $ v4l2-ctl --list-devices
 
 ## (Modify the camera index in webcam_pub.py code)
 ```python
-{
-(Line 38 in webcam_pub.py) self.cap = cv2.VideoCapture(0)
-}
+(Line 38 in webcam_pub.py) 
+self.cap = cv2.VideoCapture(0)
 ```	
 
 ## (Build Dockerfile)
@@ -44,14 +43,14 @@ $ v4l2-ctl --list-devices
 
 ### Run Docker Image w/ ROS_DOMAIN_ID
 $ sudo docker run -it --entrypoint /bin/bash yolov5_cpu -c "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=2 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node" --name yolov5_docker
-<br>[참고] https://www.daleseo.com/docker-run/
+<br><br>[참고] https://www.daleseo.com/docker-run/
 
 
 
 ## (Build ROS2 nodes for Out_Docker)
-1. Go to "KIMe-Tutorials" folder
+1. Go to "KIMe-Tutorials" folder <br>
 $ cd ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
-2. Build
+2. Build <br>
 $ colcon build --symlink-install
 
 
@@ -65,7 +64,7 @@ $ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
 $ ros2 run ros2_yolov5 img_subscriber
 
 
-
+<br><br><br><br>
 # ETC
 
 ## (Docker Images/ps list)
@@ -91,10 +90,11 @@ $ sudo docker info -f '{{ .DockerRootDir }}' <br>
 ### 2. Changing the Storage Location
 $ mkdir -p /tmp/new-docker-root-dir <br>
 $ sudo nano /etc/docker/daemon.json <br>
-{ <br>
-   "data-root": "/tmp/new-docker-root-dir" <br>
-} <br>
-<br>
+```
+{
+   "data-root": "/tmp/new-docker-root-dir"
+}
+```
 ### 3. Restarting & Confirming the Storage Location
 $ sudo systemctl restart docker <br>
 $ sudo docker info -f '{{ .DockerRootDir}}' <br>
