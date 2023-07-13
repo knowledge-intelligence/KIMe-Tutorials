@@ -1,4 +1,7 @@
-# ROS2 Yolov5 Docker Tutorial
+# ROS2 Yolov5 Docker Tutorial (in VirtualBox)
+- Network connected.
+- USB camera connected to VM.
+- HDD >= 50GB for Docker build
 
 
 ## (Install ROS2 Foxy)
@@ -13,24 +16,41 @@ $ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/m
 $ git clone https://github.com/knowledge-intelligence/KIMe-Tutorials.git -b main
 
 
-## (Docker Build)
-$ sudo docker build . -t yolov5 <br>
-$ sudo docker build -f Dockerfile_CPU . -t yolov5_cpu
+## (Modify ROS Domain ID)
+$ export ROS_DOMAIN_ID=??? (0 ~ 101)
+  
+## (Check Camera in VirtualBox by Cheese app)
+Using Ubuntu Software > Cheese App Install
 
-## (Docker Run)
-$ sudo docker run -it yolov5 --name yolov5_docker <br>
-$ sudo docker run -it --entrypoint /bin/bash yolov5_cpu -c "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=2 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node" --name yolov5_docker
-[참고] https://www.daleseo.com/docker-run/
-
-
-## (Out_Docker Build)
-$ cd ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
-$ colcon build --symlink-install
-
-
-## (Webcam Check)
-$ sudo apt install v4l-utils <br>
+## (Check Webcam Index)
+(If needed) $ sudo apt install v4l-utils <br>
 $ v4l2-ctl --list-devices
+
+## (Modify the camera index in webcam_pub.py code)
+'''python
+(Line 38: in webcam_pub.py) self.cap = cv2.VideoCapture(0)
+'''	
+
+## (Build Dockerfile)
+(GPU) $ sudo docker build . -t yolov5 <br>
+(CPU) $ sudo docker build -f Dockerfile_CPU . -t yolov5_cpu
+
+
+## (Run Docker Image)
+(GPU) $ sudo docker run -it yolov5 --name yolov5_docker <br>
+(CPU) $ sudo docker run -it yolov5_cpu --name yolov5_docker <br>
+
+### Run Docker Image w/ ROS_DOMAIN_ID
+$ sudo docker run -it --entrypoint /bin/bash yolov5_cpu -c "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=2 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node" --name yolov5_docker
+<br>[참고] https://www.daleseo.com/docker-run/
+
+
+
+## (Build ROS2 nodes for Out_Docker)
+1. Go to "KIMe-Tutorials" folder
+$ cd ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
+2. Build
+$ colcon build --symlink-install
 
 
 ## (Run Out_Docker Nodes - Publisher)
@@ -43,9 +63,10 @@ $ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
 $ ros2 run ros2_yolov5 img_subscriber
 
 
-## (Docker Images/ps list)
 
-## (remove all containers)
+# ETC
+
+## (Docker Images/ps list)
 $ sudo docker images list <br>
 $ sudo docker ps <br>
 
@@ -62,7 +83,7 @@ $ docker exec -it \<container-name-or-id\> bash
 (Ref) https://www.baeldung.com/linux/docker-fix-no-space-error
 <br><br>
 ### 1. Finding the Current Storage Location
-$ docker info -f '{{ .DockerRootDir }}' <br>
+$ sudo docker info -f '{{ .DockerRootDir }}' <br>
 /var/lib/docker <br>
 <br>
 ### 2. Changing the Storage Location
@@ -74,5 +95,5 @@ $ sudo nano /etc/docker/daemon.json <br>
 <br>
 ### 3. Restarting & Confirming the Storage Location
 $ sudo systemctl restart docker <br>
-$ docker info -f '{{ .DockerRootDir}}' <br>
+$ sudo docker info -f '{{ .DockerRootDir}}' <br>
 /tmp/new-docker-root-dir <br>
