@@ -86,7 +86,7 @@ $ docker exec -it \<container-name-or-id\> bash
 ### 1. Finding the Current Storage Location
 $ sudo docker info -f '{{ .DockerRootDir }}' <br>
 > /var/lib/docker <br>
-<br>
+
 ### 2. Changing the Storage Location
 $ mkdir -p /tmp/new-docker-root-dir <br>
 $ sudo nano /etc/docker/daemon.json <br>
@@ -98,4 +98,4 @@ $ sudo nano /etc/docker/daemon.json <br>
 ### 3. Restarting & Confirming the Storage Location
 $ sudo systemctl restart docker <br>
 $ sudo docker info -f '{{ .DockerRootDir}}' <br>
-> /tmp/new-docker-root-dir <br>
+> /tmp/new-docker-root-dir
