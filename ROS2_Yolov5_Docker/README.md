@@ -57,3 +57,23 @@ $ docker run --rm -it --entrypoint bash \<image-name-or-id\>
 (-it 컨테이너를 종료하지 않고, 터미널의 입력을 계속해서 컨테이너로 전달하기 위해서 사용) <br>
 $ docker exec -it \<container-name-or-id\> bash
 
+
+## docker build no space left on device
+https://www.baeldung.com/linux/docker-fix-no-space-error
+<br>
+4.1. Finding the Current Storage Location <br>
+$ docker info -f '{{ .DockerRootDir }}' <br>
+/var/lib/docker <br>
+<br>
+4.2. Changing the Storage Location <br>
+$ mkdir -p /tmp/new-docker-root-dir <br>
+$ sudo vi /etc/docker/daemon.json <br>
+<br>
+$ sudo cat /etc/docker/daemon.json  <br>
+{ <br>
+   "data-root": "/tmp/new-docker-root-dir" <br>
+} <br>
+<br>
+$ sudo systemctl restart docker <br>
+$ docker info -f '{{ .DockerRootDir}}' <br>
+/tmp/new-docker-root-dir <br>
