@@ -24,7 +24,7 @@ $ sudo docker run -it --entrypoint /bin/bash yolov5_cpu -c "source /opt/ros/foxy
 
 
 ## (Out_Docker Build)
-$ cd ~/ROS-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
+$ cd ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
 $ colcon build --symlink-install
 
 
@@ -34,12 +34,12 @@ $ v4l2-ctl --list-devices
 
 
 ## (Run Out_Docker Nodes - Publisher)
-$ source ~/ROS-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
+$ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
 $ ros2 run ros2_yolov5 img_publisher
 
 
 ## (Run Out_Docker Nodes - Subscriber)
-$ source ~/ROS-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
+$ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash <br>
 $ ros2 run ros2_yolov5 img_subscriber
 
 
