@@ -27,9 +27,11 @@ Using Ubuntu Software > Cheese App Install
 $ v4l2-ctl --list-devices
 
 ## (Modify the camera index in webcam_pub.py code)
-'''python
-(Line 38: in webcam_pub.py) self.cap = cv2.VideoCapture(0)
-'''	
+```python
+{
+(Line 38 in webcam_pub.py) self.cap = cv2.VideoCapture(0)
+}
+```	
 
 ## (Build Dockerfile)
 (GPU) $ sudo docker build . -t yolov5 <br>
