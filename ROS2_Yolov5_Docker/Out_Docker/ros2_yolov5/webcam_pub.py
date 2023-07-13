@@ -35,7 +35,7 @@ class ImagePublisher(Node):
          
     # Create a VideoCapture object
     # The argument '0' gets the default webcam.
-    self.cap = cv2.VideoCapture(4)
+    self.cap = cv2.VideoCapture(0)
          
     # Used to convert between ROS and OpenCV images
     self.br = CvBridge()
@@ -58,10 +58,16 @@ class ImagePublisher(Node):
 
       # # Display image
       # cv2.imshow("camera", frame)
-      # cv2.waitKey(1)      
+      # cv2.waitKey(1)   
+      
+      # Display the message on the console
+      self.get_logger().info('Publishing video frame')
+
+    else:
+      # Display the error message on the console
+      self.get_logger().info('Capturing failed')
  
-    # Display the message on the console
-    self.get_logger().info('Publishing video frame')
+
   
 def main(args=None):
   
