@@ -53,7 +53,9 @@ cd ~ <br>
 wget https://github.com/knowledge-intelligence/KIMe-Tutorials/raw/main/ROS1_DRL_Nav/DRL-robot-navigation_Trained%20Model.zip <br>
 unzip "DRL-robot-navigation_Trained Model.zip"
 
-
+## Test Trained Model Zip
+cd ~/DRL-robot-navigation/TD3
+python3 test_velodyne_td3.py
 
 ## Run Gazebo Client to see the simulation
 source /usr/share/gazebo/setup.sh <br>
