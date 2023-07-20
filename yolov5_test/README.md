@@ -15,7 +15,7 @@ pip install -U ultralytics
 ## yolov5_test 실행
 
 ## PIL 오류시 (DLL load failed while importing _imaging: 지정된 모듈을 찾을 수 없습니다)
-pip uninstall pillow
+pip uninstall pillow <br>
 pip install pillow==9.1.0
 
 ## Yolo v5 Github 복사
