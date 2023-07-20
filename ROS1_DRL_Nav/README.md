@@ -10,13 +10,16 @@ catkin_make_isolated
 
 
 ## Install Gazebo
+(if needed) sudo apt  install curl <br>
 curl -sSL http://get.gazebosim.org | sh
 
+## Install Pytorch
+(if needed) sudo apt install python3-pip
 
-## Install Pytorch 1.10 - GPU
+### Install Pytorch 1.10 - GPU
 pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 
-## Install Pytorch 1.10 - CPU
+### Install Pytorch 1.10 - CPU
 pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 
 ## Install Tensorboard
