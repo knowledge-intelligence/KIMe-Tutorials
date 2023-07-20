@@ -14,6 +14,8 @@ catkin_make_isolated
 curl -sSL http://get.gazebosim.org | sh
 
 ## Install Pytorch
+(if needed) sudo apt install python3-pip
+
 ### Install Pytorch 1.10 - GPU
 pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 
