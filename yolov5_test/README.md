@@ -3,9 +3,9 @@ Yolo-v5 Test Repository
 
 
 # 환경 설치
-'''bash
+```bash
 conda config --set auto_activate_base false
-'''
+```
 ## Conda 가상환경 생성 (yolov5_test)
 conda create -n yolov5_test python=3.9 <br>
 conda activate yolov5_test
