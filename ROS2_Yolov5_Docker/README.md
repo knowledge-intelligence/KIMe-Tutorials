@@ -41,14 +41,14 @@ self.cap = cv2.VideoCapture(0)
 
 ## (Build Dockerfile)
 ```shell
-(GPU) $ sudo docker build . -t yolov5 <br>
+(GPU) $ sudo docker build . -t yolov5
 (CPU) $ sudo docker build -f Dockerfile_CPU . -t yolov5_cpu
 ```
 
 ## (Run Docker Image)
 ```shell
-(GPU) $ sudo docker run -it yolov5 --name yolov5_docker <br>
-(CPU) $ sudo docker run -it yolov5_cpu --name yolov5_docker <br>
+(GPU) $ sudo docker run -it yolov5 --name yolov5_docker
+(CPU) $ sudo docker run -it yolov5_cpu --name yolov5_docker
 ```
 ### Run Docker Image w/ ROS_DOMAIN_ID
 ```shell
