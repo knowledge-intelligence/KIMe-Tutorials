@@ -63,4 +63,11 @@ network:
         addresses: [8.8.8.8,8.8.4.4]
       access-points:
         "ROSMECHA1":
-          password: "rosmecha1"		  
+          password: "rosmecha1"
+
+
+
+
+sudo netplan --debug generate
+sudo netplan apply
+  
