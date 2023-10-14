@@ -10,6 +10,7 @@ $ mc
 
 ## 5. 소스 코드 다운로드 및 빌드
 ```shell
+$ mkdir -p ~/robot_ws/src
 $ cd ~/robot_ws/src
 $ git clone https://github.com/robotpilot/ros2-seminar-examples.git
 $ cd ~/robot_ws && colcon build --symlink-install
@@ -17,9 +18,9 @@ $ cd ~/robot_ws && colcon build --symlink-install
 
 ## 6. 실행
 ```shell
+$ source ~/robot_ws/install/setup.bash
 $ ros2 run topic_service_action_rclpy_example calculator
 $ ros2 run topic_service_action_rclpy_example argument
-$ ros2 run topic_service_action_rclpy_example calculator
 $ ros2 run topic_service_action_rclpy_example operator
 $ ros2 run topic_service_action_rclpy_example checker
 $ ros2 run topic_service_action_rclpy_example checker -g 100
