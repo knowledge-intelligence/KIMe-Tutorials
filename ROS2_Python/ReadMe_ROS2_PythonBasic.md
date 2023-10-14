@@ -102,8 +102,7 @@ if __name__ == '__main__':
 
 ## 5. 서브스크라이버 노드 작성
 ```shell
-$ mkdir -p ~/robot_ws/src
-$ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
+(필요시) $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
 $ mcedit helloworld_subscriber.py
 ```
 ```python
