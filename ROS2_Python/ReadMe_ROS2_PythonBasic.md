@@ -61,7 +61,7 @@ setup(
 
 ## 4. 퍼블리셔 노드 작성
 ```shell
-(필요시) $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
+$ cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 $ mcedit helloworld_publisher.py
 ```
 ```python
@@ -70,39 +70,43 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
+
 class HelloworldPublisher(Node):
-  def __init__(self):
-    super().__init__('helloworld_publisher')
-    qos_profile = QoSProfile(depth=10)
-    self.helloworld_publisher = self.create_publisher(String, 'helloworld', qos_profile)
-    self.timer = self.create_timer(1, self.publish_helloworld_msg)
-    self.count = 0
 
-  def publish_helloworld_msg(self):
-    msg = String()
-    msg.data = 'Hello World: {0}'.format(self.count)
-    self.helloworld_publisher.publish(msg)
-    self.get_logger().info('Published message: {0}'.format(msg.data))
-    self.count += 1
+    def __init__(self):
+        super().__init__('helloworld_publisher')
+        qos_profile = QoSProfile(depth=10)
+        self.helloworld_publisher = self.create_publisher(String, 'helloworld', qos_profile)
+        self.timer = self.create_timer(1, self.publish_helloworld_msg)
+        self.count = 0
 
-  def main(args=None):
+    def publish_helloworld_msg(self):
+        msg = String()
+        msg.data = 'Hello World: {0}'.format(self.count)
+        self.helloworld_publisher.publish(msg)
+        self.get_logger().info('Published message: {0}'.format(msg.data))
+        self.count += 1
+
+
+def main(args=None):
     rclpy.init(args=args)
     node = HelloworldPublisher()
     try:
-      rclpy.spin(node)
+        rclpy.spin(node)
     except KeyboardInterrupt:
-      node.get_logger().info('Keyboard Interrupt (SIGINT)')
+        node.get_logger().info('Keyboard Interrupt (SIGINT)')
     finally:
-      node.destroy_node()
-      rclpy.shutdown()
+        node.destroy_node()
+        rclpy.shutdown()
+
 
 if __name__ == '__main__':
-  main()
+    main()
 ```
 
 ## 5. 서브스크라이버 노드 작성
 ```shell
-(필요시) $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
+$ cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 $ mcedit helloworld_subscriber.py
 ```
 ```python
@@ -111,32 +115,36 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
-class HelloworldSubscriber(Node):
-def __init__(self):
-    super().__init__(‘helloworld_subscriber')
-    qos_profile = QoSProfile(depth=10)
-    self.helloworld_subscriber = self.create_subscription(​
-        String,​
-        'helloworld',​
-        self.subscribe_topic_message,​
-        qos_profile)​
 
- def subscribe_topic_message(self, msg):
-    self.get_logger().info('Received message: {0}'.format(msg.data))
+class HelloworldSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('Helloworld_subscriber')
+        qos_profile = QoSProfile(depth=10)
+        self.helloworld_subscriber = self.create_subscription(
+            String,
+            'helloworld',
+            self.subscribe_topic_message,
+            qos_profile)
+
+    def subscribe_topic_message(self, msg):
+        self.get_logger().info('Received message: {0}'.format(msg.data))
+
 
 def main(args=None):
     rclpy.init(args=args)
     node = HelloworldSubscriber()
     try:
-      rclpy.spin(node)
+        rclpy.spin(node)
     except KeyboardInterrupt:
-      node.get_logger().info('Keyboard Interrupt (SIGINT)')
+        node.get_logger().info('Keyboard Interrupt (SIGINT)')
     finally:
-      node.destroy_node()
-      rclpy.shutdown()
+        node.destroy_node()
+        rclpy.shutdown()
+
 
 if __name__ == '__main__':
-  main()
+    main()
 ```
 
 
