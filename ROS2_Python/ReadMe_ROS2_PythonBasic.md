@@ -15,10 +15,16 @@ $ ros2 pkg create my_first_ros_rclpy_pkg --build-type ament_python --dependencie
 ```
 
 ## 3. 패키지 설정
+```shell
+$ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
+$ mcedit setup.py
+```
 ```python
 from setuptools import find_packages
 from setuptools import setup
+
 package_name = 'my_first_ros_rclpy_pkg'
+
 setup(
     name=package_name,
     version='0.0.1',
@@ -55,8 +61,7 @@ setup(
 
 ## 4. 퍼블리셔 노드 작성
 ```shell
-$ mkdir -p ~/robot_ws/src
-$ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
+(필요시) $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
 $ mcedit helloworld_publisher.py
 ```
 ```python
