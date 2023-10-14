@@ -6,8 +6,10 @@
 https://github.com/robotpilot/ros2-seminar-examples
 
 ## Linux CMD 파일 메니져
+```shell
 $ mc
 $ mcedit
+```
 
 ## 5. 소스 코드 다운로드 및 빌드
 ```shell
