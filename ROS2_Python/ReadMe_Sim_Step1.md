@@ -1,4 +1,4 @@
-#  Simulation - Step 1
+#  Simulation - Step 1 (Gazebo)
 
 ## Install Simulation Package
 ```shell
