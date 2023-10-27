@@ -1,5 +1,8 @@
 #  Simulation - Step 1 (Gazebo)
 
+## ROS2 Package Check
+$ ros2 pkg list | grep 'turtlebot*'
+
 ## Install Simulation Package
 ```shell
 $ mkdir -p ~/turtlebot3_ws/src/
