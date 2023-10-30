@@ -1,4 +1,4 @@
-# Simulation Step 3 (Navigation - Nav2)
+# Simulation -  Step 3 (Navigation - Nav2)
 
 ## Launch Simulation World
 ```shell
