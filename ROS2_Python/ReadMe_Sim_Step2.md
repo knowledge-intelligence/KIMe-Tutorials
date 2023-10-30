@@ -1,4 +1,4 @@
-# Simulation - Step 2 (SLAM)
+# Simulation - Step 2 (SLAM - Cartographer)
 
 ## Launch Simulation World
 ```shell
