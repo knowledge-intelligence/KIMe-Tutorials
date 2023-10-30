@@ -1,4 +1,4 @@
-#  Simulation - Step 1 (Gazebo)
+#  Simulation - Step 1 (Gazebo) [ROS2 - Foxy]
 
 ## ROS2 Package Check
 $ ros2 pkg list | grep 'turtlebot*'
