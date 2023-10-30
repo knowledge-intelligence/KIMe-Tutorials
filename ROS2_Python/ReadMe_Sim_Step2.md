@@ -1,4 +1,4 @@
-# Simulation - Step 2 (SLAM - Cartographer)
+# Simulation - Step 2 (SLAM - Cartographer)  [ROS2 - Foxy]
 
 ## Launch Simulation World
 ```shell
