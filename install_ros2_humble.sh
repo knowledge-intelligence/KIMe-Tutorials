@@ -81,7 +81,7 @@ colcon build --symlink-install
 
 
 echo "[Setting the ROS evironment]"
-sh -c "echo \"alias dofoxy='source /opt/ros/${name_ros2_distro}/setup.bash; echo \"Activate foxy!\"'\" >> ~/.bashrc"
+sh -c "echo \"alias dohumble='source /opt/ros/${name_ros2_distro}/setup.bash; echo \"Activate humble!\"'\" >> ~/.bashrc"
 
 # sh -c "echo \"source /opt/ros/${name_ros2_distro}/setup.bash\" >> ~/.bashrc"
 # sh -c "echo \"source ~/${name_ws}/install/local_setup.bash\" >> ~/.bashrc"
