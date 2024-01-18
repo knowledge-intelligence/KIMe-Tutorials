@@ -9,6 +9,9 @@ $ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/m
 (Install ROS2 Foxy)<br>
 $ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_foxy.sh && chmod 755 ./install_ros2_foxy.sh && ./install_ros2_foxy.sh
 
+(Install ROS2 Humble)<br>
+$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_humble.sh && chmod 755 ./install_ros2_humble.sh && ./install_ros2_humble.sh
+
 
 (Install Docker)<br>
 $ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_docker.sh && chmod 755 ./install_docker.sh && ./install_docker.sh
