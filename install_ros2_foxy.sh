@@ -91,8 +91,8 @@ sh -c "echo \"alias dofoxy='source /opt/ros/${name_ros2_distro}/setup.bash; echo
 
 sh -c "echo \"export _colcon_cd_root=~/${name_ws}\" >> ~/.bashrc"
 
-sh -c "echo \"export ROS_DOMAIN_ID=1\" >> ~/.bashrc"
-sh -c "echo \"export ROS_NAMESPACE=robot1\" >> ~/.bashrc"
+sh -c "echo \"export ROS_DOMAIN_ID=0\" >> ~/.bashrc"
+# sh -c "echo \"export ROS_NAMESPACE=robot1\" >> ~/.bashrc"
 
 sh -c "echo \"export RMW_IMPLEMENTATION=rmw_fastrtps_cpp\" >> ~/.bashrc"
 # export RMW_IMPLEMENTATION=rmw_fastrtps_cpp

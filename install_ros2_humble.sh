@@ -91,8 +91,8 @@ sh -c "echo \"alias dofoxy='source /opt/ros/${name_ros2_distro}/setup.bash; echo
 
 sh -c "echo \"export _colcon_cd_root=~/${name_ws}\" >> ~/.bashrc"
 
-sh -c "echo \"export ROS_DOMAIN_ID=1\" >> ~/.bashrc"
-sh -c "echo \"export ROS_NAMESPACE=robot1\" >> ~/.bashrc"
+sh -c "echo \"export ROS_DOMAIN_ID=0\" >> ~/.bashrc"
+# sh -c "echo \"export ROS_NAMESPACE=robot1\" >> ~/.bashrc"
 
 sh -c "echo \"export RMW_IMPLEMENTATION=rmw_fastrtps_cpp\" >> ~/.bashrc"
 # export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
@@ -101,10 +101,10 @@ sh -c "echo \"export RMW_IMPLEMENTATION=rmw_fastrtps_cpp\" >> ~/.bashrc"
 # export RMW_IMPLEMENTATION=rmw_gurumdds_cpp
 
 # export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity} {time}] [{name}]: {message} ({function_name}() at {file_name}:{line_number})'
-sh -c "echo \"export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity}]: {message}'\" >> ~/.bashrc"
-sh -c "echo \"export RCUTILS_COLORIZED_OUTPUT=1\" >> ~/.bashrc"
-sh -c "echo \"export RCUTILS_LOGGING_USE_STDOUT=0\" >> ~/.bashrc"
-sh -c "echo \"export RCUTILS_LOGGING_BUFFERED_STREAM=1\" >> ~/.bashrc"
+# sh -c "echo \"export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity}]: {message}'\" >> ~/.bashrc"
+# sh -c "echo \"export RCUTILS_COLORIZED_OUTPUT=1\" >> ~/.bashrc"
+# sh -c "echo \"export RCUTILS_LOGGING_USE_STDOUT=0\" >> ~/.bashrc"
+# sh -c "echo \"export RCUTILS_LOGGING_BUFFERED_STREAM=1\" >> ~/.bashrc"
 
 
 echo "[Complete!!!]"
