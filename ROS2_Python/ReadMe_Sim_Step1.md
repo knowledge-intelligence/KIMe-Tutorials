@@ -7,9 +7,9 @@ $ ros2 pkg list | grep 'turtlebot*'
 ```shell
 $ mkdir -p ~/turtlebot3_ws/src/
 $ cd ~/turtlebot3_ws/src/
-$ git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
-$ git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
-$ git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+$ git clone -b humble-devel https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+$ git clone -b humble-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
+$ git clone -b humble-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 $ cd ~/turtlebot3_ws && colcon build --symlink-install
 ```
 
