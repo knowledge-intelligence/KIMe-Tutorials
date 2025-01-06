@@ -1,4 +1,4 @@
-# Simulation - Step 2 (SLAM - Cartographer)  [ROS2 - Foxy]
+# Simulation[ROS2 - Humble] - Step 2 (Turtlebot3 Gazebo SLAM - Cartographer)
 
 ## Launch Simulation World
 ```shell
