@@ -1,4 +1,4 @@
-#  Simulation - Step 1 (Gazebo) [ROS2 - Foxy]
+#  Simulation[ROS2 - Humble] - Step 1 (Turtlebot3 Gazebo Setting)
 
 ## ROS2 Package Check
 $ ros2 pkg list | grep 'turtlebot*'
@@ -35,7 +35,7 @@ $ export TURTLEBOT3_MODEL=waffle_pi
 $ ros2 launch turtlebot3_gazebo turtlebot3_house.launch.py
 ```
 
-## Operate TurtleBot3
+## Tele-Operate TurtleBot3
 ```shell
 $ source ~/turtlebot3_ws/install/setup.bash
 $ export TURTLEBOT3_MODEL=waffle_pi
