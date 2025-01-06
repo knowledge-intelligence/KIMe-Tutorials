@@ -1,7 +1,9 @@
 #  Simulation[ROS2 - Humble] - Step 1 (Turtlebot3 Gazebo Setting)
 
 ## ROS2 Package Check
+```shell
 $ ros2 pkg list | grep 'turtlebot*'
+```
 
 ## Install Simulation Package
 ```shell
