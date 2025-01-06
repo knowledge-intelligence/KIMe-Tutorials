@@ -1,4 +1,4 @@
-# Simulation -  Step 3 (Navigation - Nav2) [ROS2 - Foxy]
+# Simulation[ROS2 - Humble] - Step 3 (Turtlebot3 Gazebo Navigation - NAV2)
 
 ## Launch Simulation World
 ```shell
@@ -34,15 +34,3 @@ $ ros2 run turtlebot3_teleop teleop_keyboard
 
 ## Set Navigation Goal
 - Click the "Navigation2 Goal" button
-
-
-
-
-
-## Not Tested
-- https://www.youtube.com/watch?v=IrJmuow1r7g
-- https://roboticsbackend.com/ros2-nav2-tutorial/
-- First, as you may know, ROS2 communication is based on DDS (for the middleware). No need to dive into this now, you just have to know that there are several possible DDS implementations, and the default one for ROS2 is Fast DDS. Unfortunately it doesn’t work so well with Nav2, so it’s been recommended to use Cyclone DDS instead.
-- $ sudo gedit /opt/ros/humble/share/turtlebot3_navigation2/param/burger.yaml
-- #robot_model_type: "differential"
-- robot_model_type: "nav2_amcl::DifferentialMotionModel"
