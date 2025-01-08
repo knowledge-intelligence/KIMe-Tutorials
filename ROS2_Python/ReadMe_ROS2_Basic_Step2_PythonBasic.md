@@ -1,21 +1,24 @@
+# ROS2 패키지 기초 (Python - Topic)
+
 ## Linux CMD 파일 메니져
 ```shell
 $ mc
 $ mcedit
 ```
 
-## 2. 패키지 생성
+## 1. 패키지 생성
 ```shell
 $ mkdir -p ~/robot_ws/src
 $ cd ~/robot_ws/src
 $ ros2 pkg create my_first_ros_rclpy_pkg --build-type ament_python --dependencies rclpy std_msgs
 ```
 
-## 3. 패키지 설정
+## 2. 패키지 설정
 ```shell
 $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg
 $ mcedit setup.py
 ```
+
 ```python
 from setuptools import find_packages
 from setuptools import setup
@@ -55,21 +58,19 @@ setup(
     })
 ```
 
-
-## 4. 퍼블리셔 노드 작성
+## 3. 퍼블리셔 노드 작성
 ```shell
 $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 $ mcedit helloworld_publisher.py
 ```
+
 ```python
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
-
 class HelloworldPublisher(Node):
-
     def __init__(self):
         super().__init__('helloworld_publisher')
         qos_profile = QoSProfile(depth=10)
@@ -84,7 +85,6 @@ class HelloworldPublisher(Node):
         self.get_logger().info('Published message: {0}'.format(msg.data))
         self.count += 1
 
-
 def main(args=None):
     rclpy.init(args=args)
     node = HelloworldPublisher()
@@ -96,16 +96,16 @@ def main(args=None):
         node.destroy_node()
         rclpy.shutdown()
 
-
 if __name__ == '__main__':
     main()
 ```
 
-## 5. 서브스크라이버 노드 작성
+## 4. 서브스크라이버 노드 작성
 ```shell
 $ cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 $ mcedit helloworld_subscriber.py
 ```
+
 ```python
 import rclpy
 from rclpy.node import Node
@@ -127,7 +127,6 @@ class HelloworldSubscriber(Node):
     def subscribe_topic_message(self, msg):
         self.get_logger().info('Received message: {0}'.format(msg.data))
 
-
 def main(args=None):
     rclpy.init(args=args)
     node = HelloworldSubscriber()
@@ -139,20 +138,21 @@ def main(args=None):
         node.destroy_node()
         rclpy.shutdown()
 
-
 if __name__ == '__main__':
     main()
 ```
 
-
-## 6. 빌드
+## 5. 빌드
 ```shell
 $ cd ~/robot_ws && colcon build --symlink-install --packages-select my_first_ros_rclpy_pkg
 ```
 
-## 7. 실행
+## 6. 실행
 ```shell
 $ source ~/robot_ws/install/local_setup.bash
 $ ros2 run my_first_ros_rclpy_pkg helloworld_subscriber
+```
+```shell
+$ source ~/robot_ws/install/local_setup.bash
 $ ros2 run my_first_ros_rclpy_pkg helloworld_publisher
 ```
