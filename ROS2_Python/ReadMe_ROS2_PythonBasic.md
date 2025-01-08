@@ -1,6 +1,3 @@
-![image](https://github.com/knowledge-intelligence/KIMe-Tutorials/assets/7073822/afd25140-3f6f-4d23-808a-518b1e9ad9b4)# ROS2 프로그래밍기초 (Python)
-
-
 ## Linux CMD 파일 메니져
 ```shell
 $ mc
