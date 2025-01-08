@@ -1,12 +1,9 @@
-# ROS2 Yolov5 Docker Tutorial (in VirtualBox)
-- Network connected.
-- USB camera connected to VM.
-- HDD >= 50GB for Docker build
+# ROS2 Yolov5 Docker Tutorial
 
 
-## (Install ROS2 Foxy)
+## (Install ROS2 Humble)
 ```shell
-wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_foxy.sh && chmod 755 ./install_ros2_foxy.sh && ./install_ros2_foxy.sh
+wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_humble.sh && chmod 755 ./install_ros2_humble.sh && ./install_ros2_humble.sh
 ```
 
 ## (Install Docker)
@@ -35,9 +32,9 @@ v4l2-ctl --list-devices
 ```
 ## (Modify the camera index in webcam_pub.py code)
 ```python
-(Line 38 in webcam_pub.py) 
+(Line 38 in webcam_pub.py)
 self.cap = cv2.VideoCapture(0)
-```	
+```
 
 ## (Build Dockerfile)
 ```shell
