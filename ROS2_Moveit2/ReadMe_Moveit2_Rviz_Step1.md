@@ -34,3 +34,16 @@ cd ~/ws_moveit2
 source install/local_setup.sh
 ros2 launch moveit_resources_panda_moveit_config demo.launch.py
 ```
+
+
+## Run Launch (Kinova Gen3 Moveit2 RViz) - Not Tested
+https://github.com/Kinovarobotics/ros2_kortex
+```shell
+mkdir -p ros2_kortex_ws/src
+cd ros2_kortex_ws/src
+git clone https://github.com/Kinovarobotics/ros2_kortex.git src/ros2_kortex
+
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+colcon build --packages-select moveit_resources_panda_moveit_config
+```
