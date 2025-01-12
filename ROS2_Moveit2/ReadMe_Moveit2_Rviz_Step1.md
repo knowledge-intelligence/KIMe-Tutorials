@@ -28,5 +28,7 @@ colcon build --packages-select moveit_resources_panda_moveit_config
 
 ## Run Launch (Panda Moveit2 RViz)
 ```shell
-ros2 launch moveit_resource_panda_moveit_config demo.launch.py
+cd ~/ws_moveit2
+source install/local_setup.sh
+ros2 launch moveit_resources_panda_moveit_config demo.launch.py
 ```
