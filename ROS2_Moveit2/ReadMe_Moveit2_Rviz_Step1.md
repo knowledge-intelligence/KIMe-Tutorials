@@ -3,6 +3,7 @@
 ## Reference
 - https://moveit.picknik.ai/main/doc/examples/setup_assistant/setup_assistant_tutorial.html
 - https://moveit.picknik.ai/main/doc/tutorials/quickstart_in_rviz/quickstart_in_rviz_tutorial.html
+- https://github.com/Kinovarobotics/ros2_kortex
 - https://github.com/moveit/moveit2_tutorials
 - https://github.com/moveit/moveit2_tutorials/tree/0b64862bae30bcf9c3b7ff5435c4749538123d57/doc/tutorials/quickstart_in_rviz
 - https://github.com/Kinovarobotics/ros2_kortex/blob/97a0e7c9a2b7970f8de5830919e2fe0d7eea3bf6/kortex_moveit_config/kinova_gen3_7dof_robotiq_2f_85_moveit_config/package.xml#L4
