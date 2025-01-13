@@ -2,7 +2,7 @@
 
 ## Verify GPU Availability
 ```shell
-python
+python3
 ```
 ```python
 import torch
