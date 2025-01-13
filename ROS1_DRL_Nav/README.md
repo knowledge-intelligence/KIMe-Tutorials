@@ -68,3 +68,19 @@ gazebo --verbose
 ## Kill Gazebo
 killall gzserver <br>
 killall rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient python python3
+
+
+
+
+## Test
+```shell
+cd ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker
+sudo docker build -f Dockerfile . -t noetic_env
+
+
+sudo docker run --rm -it --privileged \
+   --net=host -e DISPLAY=$DISPLAY \
+   -v /tmp/.X11-unix:/tmp/.X11-unix  \
+   -v /tmp/runtime-user:/tmp/runtime-user \
+   --name drl_nav noetic_env
+```
