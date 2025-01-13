@@ -45,7 +45,7 @@ cd ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker
 sudo docker build -f Dockerfile . -t yolov5
 ```
 
-## (Run Docker Image)
+## Run Docker Image
 ```shell
 sudo docker run --rm -it --privileged \
    --net=host -e DISPLAY=$DISPLAY \
