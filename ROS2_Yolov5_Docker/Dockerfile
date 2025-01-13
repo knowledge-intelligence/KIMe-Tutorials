@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+#FROM ubuntu:22.04
+FROM nvidia/cuda:12.6.3-cudnn-runtime-ubuntu22.04
 FROM ros:humble
 
 # ROS2 Desktop version
