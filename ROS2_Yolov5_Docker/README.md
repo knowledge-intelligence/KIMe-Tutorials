@@ -11,6 +11,16 @@ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/mas
 wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_docker.sh && chmod 755 ./install_docker.sh && ./install_docker.sh
 ```
 
+## Verify GPU Availability
+```shell
+python
+```
+```python
+import torch
+print(torch.cuda.is_available())  # Should print True if GPU is available
+```
+
+
 ## (git clone)
 ```shell
 mkdir -p ~/yolo_ws
