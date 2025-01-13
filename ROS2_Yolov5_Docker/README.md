@@ -1,4 +1,4 @@
-# ROS2 Yolov5 Docker Tutorial
+# ROS2 Yolov5 Docker Tutorial (Humble Tested)
 
 
 ## (Install ROS2 Humble)
@@ -13,11 +13,15 @@ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/mas
 
 ## (git clone)
 ```shell
+mkdir -p ~/yolo_ws
+cd ~/yolo_ws
 git clone https://github.com/knowledge-intelligence/KIMe-Tutorials.git -b main
 ```
 
 ## (Modify ROS Domain ID)
 ```shell
+echo $ROS_DOMAIN_ID
+#or
 export ROS_DOMAIN_ID=??? (0 ~ 101)
 ```
 ## (Check Camera in VirtualBox by Cheese app)
@@ -38,6 +42,7 @@ self.cap = cv2.VideoCapture(0)
 
 ## (Build Dockerfile)
 ```shell
+cd ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker
 (GPU) $ sudo docker build . -t yolov5
 (CPU) $ sudo docker build -f Dockerfile_CPU . -t yolov5_cpu
 ```
@@ -51,26 +56,25 @@ self.cap = cv2.VideoCapture(0)
 ```shell
 sudo docker run -it --entrypoint /bin/bash yolov5_cpu -c "source /opt/ros/foxy/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=2 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node" --name yolov5_docker
 ```
-[참고] https://www.daleseo.com/docker-run/
-
 
 
 ## (Build ROS2 nodes for Out_Docker)
 1. Go to "KIMe-Tutorials" folder <br>
-$ cd ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/ <br>
+$ cd ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker <br>
 2. Build <br>
-$ colcon build --symlink-install
+$ colcon build --symlink-install --packages-select ros2_yolov5
+$ source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
 
 
 ## (Run Out_Docker Nodes - Publisher)
 ```shell
-$ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash
+$ source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
 $ ros2 run ros2_yolov5 img_publisher
 ```
 
 ## (Run Out_Docker Nodes - Subscriber)
 ```shell
-$ source ~/KIMe-Tutorials/ROS2_Yolov5_Docker/Out_Docker/install/setup.bash
+$ source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
 $ ros2 run ros2_yolov5 img_subscriber
 ```
 
