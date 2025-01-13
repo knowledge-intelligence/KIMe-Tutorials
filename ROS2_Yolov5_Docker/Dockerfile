@@ -1,4 +1,4 @@
-FROM shaderobotics/ros:foxy-cudnn
+FROM shaderobotics/ros:humble-cuda-runtime
 
 # create a basic workspace
 RUN ["/bin/bash", "-c", "mkdir -p /app/kime_ws"]
@@ -18,10 +18,10 @@ RUN apt-get update && \
     libsm6 \
     libxext6 \
     python3-pip \
-    ros-foxy-cv-bridge \
-    ros-foxy-vision-msgs \
+    ros-humble-cv-bridge \
+    ros-humble-vision-msgs \
     python3-natsort \
-    ros-foxy-vision-opencv && \
+    ros-humble-vision-opencv && \
     rm -rf /var/lib/apt/lists/*
    
 # Utilize pip to install any required python dependencies
