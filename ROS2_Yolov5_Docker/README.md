@@ -56,18 +56,21 @@ sudo docker run --rm -it --privileged \
 
 ## Build ROS2 nodes for Out_Docker
 ```shell
+dohumble
 cd ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker
 colcon build --symlink-install --packages-select ros2_yolov5
 ```
 
 ## Run Out_Docker Nodes - Publisher
 ```shell
+dohumble
 source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
 ros2 run ros2_yolov5 img_publisher
 ```
 
 ## Run Out_Docker Nodes - Subscriber
 ```shell
+dohumble
 source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
 ros2 run ros2_yolov5 img_subscriber
 ```
