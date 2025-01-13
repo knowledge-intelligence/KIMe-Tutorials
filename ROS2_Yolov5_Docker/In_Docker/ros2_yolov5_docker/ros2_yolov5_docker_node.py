@@ -22,11 +22,12 @@ class ImageSubscriber(Node):
     def listener_callback(self, data):
         self.get_logger().info("Got Image")
         current_frame = self.br.imgmsg_to_cv2(data)
-        processed_image = self.model(current_frame)
+        with torch.amp.autocast(device_type='cuda'):
+            processed_image = self.model(current_frame)
         #results = self.br.cv2_to_imgmsg(processed_image.ims[0]) # Original Img
         results = self.br.cv2_to_imgmsg(processed_image.render()[0]) # Boxed Img
 
-        self.image_publisher.publish(results)  
+        self.image_publisher.publish(results)
        
 def main(args=None):
     rclpy.init(args=args)
