@@ -14,6 +14,11 @@ git clone -b humble-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
 git clone -b humble-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 cd ~/turtlebot3_ws && colcon build --symlink-install
 ```
+### (If needed)
+```shell
+sudo apt-get install ros-humble-dynamixel-sdk
+sudo apt-get install ros-humble-gazebo-ros-pkgs
+```
 
 ## Launch Simulation World
 - Empty World
