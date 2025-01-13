@@ -1,0 +1,101 @@
+#FROM ubuntu:22.04
+FROM nvidia/cuda:12.6.3-cudnn-runtime-ubuntu20.04
+FROM ros:noetic
+
+# ROS2 Desktop version
+RUN apt-get update
+RUN apt-get install -y \
+    python3-pip
+
+RUN apt-get install -y \
+    python3-rosdep \
+    python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-wstool \
+    build-essential \
+    cmake \
+    git \
+    wget \
+    libbullet-dev \
+    curl \
+    ffmpeg \
+    python3-natsort \
+    python3-colcon-common-extensions \
+    python3-flake8 \
+    python3-pytest-cov \
+    python3-rosdep \
+    python3-setuptools \
+    python3-vcstool \
+    python3-colcon-common-extensions \
+    python3-vcstool
+
+
+RUN apt-get install -y \
+    ros-noetic-desktop-full \
+    ros-noetic-rqt-*
+
+#RUN rosdep init
+RUN rosdep update
+
+# Gazebo
+RUN curl -sSL http://get.gazebosim.org | sh
+
+RUN apt-get install -y \
+    python3-catkin-tools
+
+# Install Python 3.8.10
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y \
+    python3.8 \
+    python3.8-distutils
+
+# Update alternatives to use Python 3.8 as the default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1 \
+    && update-alternatives --config python3
+
+# Install pip for Python 3.8
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.8
+
+# Verify Python and pip versions
+RUN python3 --version
+RUN python3 -m pip --version
+
+
+RUN pip3 install -U torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116    
+RUN pip3 install -U tensorboard
+
+RUN mkdir -p /catkin_ws/src
+WORKDIR /catkin_ws
+
+ENV ROS_MASTER_URI=http://localhost:11311
+ENV ROS_HOSTNAME=localhost
+
+RUN git clone https://github.com/reiniscimurs/DRL-robot-navigation
+
+# Source ROS environment
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make_isolated"    
+
+# # # Utilize pip to install any required python dependencies
+# # RUN pip3 install --upgrade pip
+
+# # #RUN python3 -m pip install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
+# # RUN pip3 install -r https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
+
+# COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
+# COPY ./In_Docker/yolov5s.pt /app/kime_ws/
+# RUN colcon build
+
+# RUN echo 'source /opt/ros/noetic/setup.bash' >> ~/.bashrc
+# RUN echo 'source ./install/setup.bash ' >> ~/.bashrc
+
+# ENV ROS_DOMAIN_ID=1
+# ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+# ENV PYTHONWARNINGS="ignore::FutureWarning"
+
+# begin the node
+# ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash && source ./install/setup.bash && export ROS_DOMAIN_ID=1 && export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp && export PYTHONWARNINGS='ignore::FutureWarning' && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
+#ENTRYPOINT ["/bin/bash", "-c", "source ~/.bashrc && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
+# Run bash
+CMD ["bash"]
