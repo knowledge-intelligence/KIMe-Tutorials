@@ -65,6 +65,7 @@ colcon build --symlink-install --packages-select ros2_yolov5
 ```shell
 dohumble
 source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
+export ROS_DOMAIN_ID=1
 ros2 run ros2_yolov5 img_publisher
 ```
 
@@ -72,6 +73,7 @@ ros2 run ros2_yolov5 img_publisher
 ```shell
 dohumble
 source ~/yolo_ws/KIMe-Tutorials/ROS2_Yolov5_Docker/install/setup.bash
+export ROS_DOMAIN_ID=1
 ros2 run ros2_yolov5 img_subscriber
 ```
 
