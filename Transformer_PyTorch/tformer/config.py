@@ -2,8 +2,8 @@ from pathlib import Path
 
 def get_config():
     return {
-        "batch_size": 8,
-        "num_epochs": 20,
+        "batch_size": 64,   # For A6000(48G)
+        "num_epochs": 21,
         "lr": 10**-4,
         "seq": 350,
         "d_model": 512,
