@@ -37,3 +37,4 @@ conda install -c anaconda ipython
 ### Reference
 1. [github.com/ES7/Transformer-from-Scratch](https://github.com/ES7/Transformer-from-Scratch)
 2. [requirements.txt - conda, pip](https://maxo.tistory.com/115)
+3. [EN-KR](https://huggingface.co/datasets/lemon-mint/korean_english_parallel_wiki_augmented_v1/viewer/default/train)
