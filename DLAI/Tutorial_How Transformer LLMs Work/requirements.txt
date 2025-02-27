@@ -1,0 +1,9 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+#for example:
+#matplotlib==3.7.2
+torch==2.3.1
+accelerate==0.31.0
+transformers==4.41.2

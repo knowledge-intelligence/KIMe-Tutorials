@@ -1,0 +1,2 @@
+# requirements file
+torch==2.4.1
