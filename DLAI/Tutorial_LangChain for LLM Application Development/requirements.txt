@@ -1,0 +1,13 @@
+#modified to match the platform which seems to match initial release
+openai==0.27.7
+langchain==0.0.179
+python-dotenv==1.0.0
+jupyter_server==2.7.2
+wikipedia==1.4.0
+pandas==2.0.1
+# Note, if the urllib3 version is 2.x, this causes an error on the mac due to some incompatibility with the OpenSSL library
+# this version works fine and supports the lessons.
+urllib3==1.26.16
+docarray==0.37.0
+tiktoken==0.4.0
+
