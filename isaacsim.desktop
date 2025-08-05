@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=IsaaacSim
+Type=Application
+Exec=bash -c "source /opt/ros/humble/setup.bash; /home/kime/isaacsim/isaac-sim.sh"
+Terminal=true
+StartupNotify=true
