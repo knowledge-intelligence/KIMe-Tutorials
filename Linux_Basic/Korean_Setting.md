@@ -1,7 +1,11 @@
 https://linuxpia.tistory.com/772
 
 sudo apt update
+
 sudo apt install ibus ibus-hangul
+
+reboot
+
 ibus-setup
 
 
