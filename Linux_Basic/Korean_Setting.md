@@ -1,3 +1,11 @@
+https://linuxpia.tistory.com/772
+
+sudo apt update
+sudo apt install ibus ibus-hangul
+ibus-setup
+
+
+
 https://andrewpage.tistory.com/239
 
 $ ibus-setup
