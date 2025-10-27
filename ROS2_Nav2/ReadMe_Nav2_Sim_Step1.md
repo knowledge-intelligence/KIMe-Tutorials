@@ -12,7 +12,7 @@ cd ~/turtlebot3_ws/src/
 git clone -b humble https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
 git clone -b humble https://github.com/ROBOTIS-GIT/turtlebot3.git
 git clone -b humble https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
-cd ~/turtlebot3_ws && colcon build --symlink-install
+cd ~/turtlebot3_ws && colcon build
 ```
 ### (If needed)
 ```shell
