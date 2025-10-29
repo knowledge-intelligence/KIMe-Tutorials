@@ -10,6 +10,10 @@ cd ~/robot_ws/src
 git clone https://github.com/robotpilot/ros2-seminar-examples.git
 cd ~/robot_ws && colcon build --symlink-install --packages-up-to topic_service_action_rclpy_example
 ```
+```shell
+# 특정 폴더 제외 삭제
+rm -rf !(msg_srv_action_interface_example|topic_service_action_rclpy_example)
+```
 
 ## 2. 실행
 ```shell
