@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=IsaacSim Selector 5.1
+Type=Application
+Exec=/home/kime/isaacsim51/isaac-sim.selector.sh
+TryExec=/home/kime/isaacsim51/isaac-sim.selector.sh
+Terminal=true
+StartupNotify=true
