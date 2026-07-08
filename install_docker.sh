@@ -4,18 +4,24 @@
 
 set -x
 
+# Prevents apt/debconf from ever blocking on a live prompt (e.g. tzdata's
+# "Geographic area:" question) when a dependency pulls one in. `export DEBIAN_FRONTEND`
+# alone is not enough since sudo resets the environment by default, so pin debconf's
+# own frontend selection instead - that persists regardless of how apt is invoked.
+echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+export DEBIAN_FRONTEND=noninteractive
 
 # Ref: https://docs.docker.com/engine/install/ubuntu/
 
 #Uninstall old versions
 echo "[Uninstall old versions]"
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove -y $pkg || true; done
 
 #Set up the repository
 echo "[Set up the repository]"
 # Add Docker's official GPG key:
 sudo apt-get update
-sudo apt-get install ca-certificates curl
+sudo apt-get install -y ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -29,14 +35,18 @@ sudo apt-get update
 
 # Install Docker
 echo "[Install Docker]"
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Hello Docker
 echo "[Hello Docker]"
 sudo docker run hello-world
 
+# Allow current user to run docker without sudo
+echo "[Add current user to docker group]"
+sudo usermod -aG docker "$USER"
+echo "Log out and back in (or run 'newgrp docker') for the group change to take effect."
+
 
 # Done
 echo "[Complete!!!]"
 exec bash
-exit 0

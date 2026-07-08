@@ -1,11 +1,10 @@
 #!/bin/bash
-# Gen @ 200829
-# Upd @ 260708
-# : Install ROS2 Humble Hawksbill in Ubuntu 22.04
+# Gen @ 260708
+# : Install ROS2 Jazzy Jalisco in Ubuntu 24.04
 
 set -x
 
-# Without this, tzdata (pulled in as a dependency partway through the ros-humble-desktop
+# Without this, tzdata (pulled in as a dependency partway through the ros-jazzy-desktop
 # install) can hit a live debconf "Geographic area:" prompt and hang the script forever.
 # `export DEBIAN_FRONTEND` alone is not enough since sudo resets the environment by
 # default, so pin debconf's own frontend selection instead - that persists regardless
@@ -14,7 +13,7 @@ echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selecti
 export DEBIAN_FRONTEND=noninteractive
 
 name_ws="robot_ws"
-name_ros2_distro="humble"
+name_ros2_distro="jazzy"
 
 
 echo "[Setup Locales]"
@@ -25,10 +24,13 @@ sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 echo "[Setup Sources]"
-# Ref: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+# Ref: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 sudo apt install -y software-properties-common
 sudo add-apt-repository -y universe
 
+# NOTE: some minimal/cloud Ubuntu 24.04 images only enable the base `noble` suite.
+# If ros-dev-tools fails to install below due to dependency conflicts, make sure
+# /etc/apt/sources.list.d/ubuntu.sources also enables noble-updates and noble-backports.
 sudo apt update && sudo apt install -y curl
 export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F'"' '{print $4}')
 curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-$VERSION_CODENAME})_all.deb"
@@ -36,8 +38,6 @@ sudo dpkg -i /tmp/ros2-apt-source.deb
 
 echo "[Installing ROS2]"
 sudo apt update
-# NOTE: on a fresh Ubuntu 22.04 install, systemd/udev must be up to date before installing ROS2,
-# otherwise apt may remove critical system packages. Ref: https://github.com/ros2/ros2/issues/1272
 sudo apt upgrade -y
 sudo apt install -y ros-$name_ros2_distro-desktop ros-$name_ros2_distro-rmw-fastrtps* ros-$name_ros2_distro-rmw-cyclonedds*
 
@@ -57,7 +57,10 @@ sudo apt update && sudo apt install -y \
   python3-vcstool \
   wget
 
-python3 -m pip install -U \
+# NOTE: Ubuntu 24.04 ships a PEP 668 "externally-managed-environment" Python, so a plain
+# `pip install` is refused. --break-system-packages installs into the system Python as before
+# (matching the previous behavior on 22.04); use a venv instead if you'd rather avoid that.
+python3 -m pip install -U --break-system-packages \
   argcomplete \
   flake8-blind-except \
   flake8-builtins \
