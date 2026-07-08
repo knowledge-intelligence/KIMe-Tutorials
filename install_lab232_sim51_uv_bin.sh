@@ -17,6 +17,13 @@ export DEBIAN_FRONTEND=noninteractive
 # waiting for an interactive "Do you accept the EULA? (Yes/No)" prompt.
 export OMNI_KIT_ACCEPT_EULA=YES
 
+# isaaclab.sh runs `tabs 4` at startup, which aborts the script when TERM is unset
+# or "dumb" (as in headless Docker/CI shells): "'ansi+tabs': unknown terminal
+# type." / "terminal type 'dumb' cannot reset tabs". Normalize those to xterm (its
+# terminfo ships in ncurses-base) while leaving a real interactive terminal
+# (xterm-256color, etc.) untouched.
+case "${TERM:-}" in ""|dumb) export TERM=xterm ;; esac
+
 UV_ENV_NAME="env_isaaclab"
 ISAACSIM_VERSION="5.1.0"
 ISAACLAB_TAG="v2.3.2"
@@ -39,6 +46,16 @@ echo "[Installing system packages]"
 sudo apt-get update -y
 # cmake/build-essential are needed by robomimic, which Isaac Lab's --install pulls in.
 sudo apt-get install -y ca-certificates curl git unzip cmake build-essential
+
+# Isaac Sim's RTX renderer needs system OpenGL/Vulkan/X11 runtime libraries even in
+# --headless mode. A minimal Ubuntu (e.g. a clean container) lacks them, so the app
+# aborts with "libGL.so.1: cannot open shared object file" and Vulkan
+# "ERROR_INCOMPATIBLE_DRIVER". A workstation with the NVIDIA driver usually already
+# has these; installing them makes the run work on a headless/minimal host too.
+sudo apt-get install -y \
+  libgl1 libglu1-mesa libegl1 libgomp1 libatomic1 \
+  libsm6 libice6 libxt6 libxi6 libxrandr2 libxrender1 libxext6 libx11-6 \
+  libxfixes3 libxcursor1 libxinerama1 libfontconfig1 libfreetype6 libvulkan1
 
 echo "[Downloading Isaac Sim ${ISAACSIM_VERSION} binaries]"
 if [ ! -x "$ISAACSIM_PATH/isaac-sim.sh" ]; then
@@ -76,14 +93,31 @@ else
   echo "uv already installed, skipping"
 fi
 
-echo "[Creating uv venv: $UV_ENV_NAME via isaaclab.sh (experimental on Linux)]"
+echo "[Creating uv venv: $UV_ENV_NAME (python 3.11) via isaaclab.sh (experimental on Linux)]"
+# isaaclab.sh --uv creates the venv without pinning a Python version, so uv picks
+# the newest interpreter it can find (e.g. 3.14) — for which Isaac Sim and torch
+# have no wheels (they're cp311), making `--install` unsatisfiable. Pre-create the
+# venv at Python 3.11 (with --seed so `python -m pip` probes inside isaaclab.sh
+# still work); isaaclab.sh --uv then reuses it (it only skips the `uv venv` step
+# when the env dir exists) and still installs its Isaac Sim activation hooks.
 if [ ! -d "$ISAACLAB_DIR/$UV_ENV_NAME" ]; then
-  ./isaaclab.sh --uv "$UV_ENV_NAME"
-else
-  echo "uv venv $UV_ENV_NAME already exists, skipping creation"
+  uv venv --python 3.11 --seed "$ISAACLAB_DIR/$UV_ENV_NAME"
 fi
+./isaaclab.sh --uv "$UV_ENV_NAME"
 
 source "$ISAACLAB_DIR/$UV_ENV_NAME/bin/activate"
+
+echo "[Pinning build-time setuptools<81 for legacy sdists (e.g. flatdict==4.0.1)]"
+# Isaac Lab pins flatdict==4.0.1, whose setup.py does `import pkg_resources`.
+# setuptools >= 81 removed pkg_resources, so flatdict's PEP517 isolated build fails
+# with "ModuleNotFoundError: No module named 'pkg_resources'", which breaks the
+# isaaclab core install. pip applies PIP_CONSTRAINT to isolated build envs, so pin
+# the build-time setuptools to a version that still ships pkg_resources.
+echo "setuptools<81" > "$HOME/isaaclab-build-constraints.txt"
+export PIP_CONSTRAINT="$HOME/isaaclab-build-constraints.txt"
+# conda paths use `python -m pip` (PIP_CONSTRAINT); uv paths use `uv pip`, which
+# reads UV_BUILD_CONSTRAINT for its isolated build environment instead.
+export UV_BUILD_CONSTRAINT="$HOME/isaaclab-build-constraints.txt"
 
 echo "[Installing Isaac Lab extensions]"
 ./isaaclab.sh --install

@@ -15,6 +15,13 @@ export DEBIAN_FRONTEND=noninteractive
 # waiting for an interactive "Do you accept the EULA? (Yes/No)" prompt.
 export OMNI_KIT_ACCEPT_EULA=YES
 
+# isaaclab.sh runs `tabs 4` at startup, which aborts the script when TERM is unset
+# or "dumb" (as in headless Docker/CI shells): "'ansi+tabs': unknown terminal
+# type." / "terminal type 'dumb' cannot reset tabs". Normalize those to xterm (its
+# terminfo ships in ncurses-base) while leaving a real interactive terminal
+# (xterm-256color, etc.) untouched.
+case "${TERM:-}" in ""|dumb) export TERM=xterm ;; esac
+
 CONDA_ENV_NAME="env_isaaclab"
 PYTHON_VERSION="3.11"
 ISAACSIM_VERSION="5.1.0"
@@ -34,6 +41,16 @@ sudo apt-get update -y
 # cmake/build-essential are needed by robomimic, which Isaac Lab's --install pulls in.
 sudo apt-get install -y ca-certificates curl git cmake build-essential
 
+# Isaac Sim's RTX renderer needs system OpenGL/Vulkan/X11 runtime libraries even in
+# --headless mode. A minimal Ubuntu (e.g. a clean container) lacks them, so the app
+# aborts with "libGL.so.1: cannot open shared object file" and Vulkan
+# "ERROR_INCOMPATIBLE_DRIVER". A workstation with the NVIDIA driver usually already
+# has these; installing them makes the run work on a headless/minimal host too.
+sudo apt-get install -y \
+  libgl1 libglu1-mesa libegl1 libgomp1 libatomic1 \
+  libsm6 libice6 libxt6 libxi6 libxrandr2 libxrender1 libxext6 libx11-6 \
+  libxfixes3 libxcursor1 libxinerama1 libfontconfig1 libfreetype6 libvulkan1
+
 echo "[Installing Miniconda]"
 if [ ! -d "$MINICONDA_DIR" ]; then
   if [ "$ARCH" = "aarch64" ]; then
@@ -50,6 +67,14 @@ fi
 
 source "$MINICONDA_DIR/etc/profile.d/conda.sh"
 "$MINICONDA_DIR/bin/conda" init bash
+
+echo "[Accepting Anaconda channel Terms of Service]"
+# Current Miniconda ships a conda that refuses non-interactive `conda create` from
+# the default channels until their ToS is accepted (CondaToSNonInteractiveError).
+# Older conda lacks this subcommand and doesn't require acceptance, so ignore errors.
+"$MINICONDA_DIR/bin/conda" tos accept --override-channels \
+  --channel https://repo.anaconda.com/pkgs/main \
+  --channel https://repo.anaconda.com/pkgs/r 2>/dev/null || true
 
 echo "[Creating conda environment: $CONDA_ENV_NAME (python $PYTHON_VERSION)]"
 if ! conda env list | grep -q "^${CONDA_ENV_NAME} "; then
@@ -81,6 +106,18 @@ else
 fi
 
 cd "$ISAACLAB_DIR"
+
+echo "[Pinning build-time setuptools<81 for legacy sdists (e.g. flatdict==4.0.1)]"
+# Isaac Lab pins flatdict==4.0.1, whose setup.py does `import pkg_resources`.
+# setuptools >= 81 removed pkg_resources, so flatdict's PEP517 isolated build fails
+# with "ModuleNotFoundError: No module named 'pkg_resources'", which breaks the
+# isaaclab core install. pip applies PIP_CONSTRAINT to isolated build envs, so pin
+# the build-time setuptools to a version that still ships pkg_resources.
+echo "setuptools<81" > "$HOME/isaaclab-build-constraints.txt"
+export PIP_CONSTRAINT="$HOME/isaaclab-build-constraints.txt"
+# conda paths use `python -m pip` (PIP_CONSTRAINT); uv paths use `uv pip`, which
+# reads UV_BUILD_CONSTRAINT for its isolated build environment instead.
+export UV_BUILD_CONSTRAINT="$HOME/isaaclab-build-constraints.txt"
 
 echo "[Installing Isaac Lab extensions]"
 ./isaaclab.sh --install
