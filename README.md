@@ -1,7 +1,6 @@
 # KIMe-Tutorials for Yolov5 + ROS2 Tutorials
 
 
-
 ## Install uv
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -26,3 +25,7 @@ uv run python -c "import torch; print(torch.__version__, torch.cuda.is_available
 ```bash
 uv run python yolov5_test.py
 ```
+
+## 테스트 동영상
+[pexels](https://www.pexels.com/ko-kr/)
+[pixabay](https://pixabay.com/)
