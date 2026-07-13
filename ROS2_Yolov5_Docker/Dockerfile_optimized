@@ -1,0 +1,35 @@
+# ROS2 Humble이 이미 설치되어 있는 공식 이미지를 그대로 사용
+# (nvidia/cuda 베이스 + ROS2 수동 설치 과정 불필요)
+FROM ros:humble
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 이 패키지(ament_python)를 빌드/실행하는 데 실제로 필요한 패키지만 설치
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-pip \
+    python3-colcon-common-extensions \
+    ros-humble-cv-bridge \
+    ros-humble-rmw-cyclonedds-cpp \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir -U ultralytics "numpy<2"
+
+# create a basic workspace
+WORKDIR /app/kime_ws
+
+COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
+COPY ./In_Docker/yolov5s.pt /app/kime_ws/
+RUN pip install --upgrade "packaging>=22.0"
+RUN colcon build
+
+RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
+    echo 'source /app/kime_ws/install/setup.bash' >> ~/.bashrc
+
+ENV ROS_DOMAIN_ID=1
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV PYTHONWARNINGS="ignore::FutureWarning"
+
+# begin the node
+ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash && source install/setup.bash && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
+# Run bash
+CMD ["bash"]
