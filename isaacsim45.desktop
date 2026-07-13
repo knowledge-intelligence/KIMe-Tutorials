@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=IsaacSim 4.5
-Type=Application
-Exec=/home/kime/isaacsim45/isaac-sim.sh
-TryExec=/home/kime/isaacsim45/isaac-sim.sh
-Terminal=true
-StartupNotify=true

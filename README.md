@@ -1,49 +1,27 @@
-# KIMe-Tutorials
-ROS1- &amp; ROS2- &amp; etc. Tutorials
+# KIMe-Tutorials for ROS2 Tutorials
+
+## Sourcing ROS2 Jazzy
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+```bash
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Install VSCode
+sudo snap install --classic code
 
 
-## (Install ROS1 Noetic)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros_noetic.sh && chmod 755 ./install_ros_noetic.sh && ./install_ros_noetic.sh
+## Install Gazebo
+export ROS_DISTRO=jazzy
+sudo apt update
+sudo apt install ros-$ROS_DISTRO-ros-gz-sim ros-$ROS_DISTRO-ros-gz
 
 
-## (Install ROS2 Foxy)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_foxy.sh && chmod 755 ./install_ros2_foxy.sh && ./install_ros2_foxy.sh
-
-## (Install ROS2 Humble)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_ros2_humble.sh && chmod 755 ./install_ros2_humble.sh && ./install_ros2_humble.sh
-
-## (Install Docker)
-$ wget https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/master/install_docker.sh && chmod 755 ./install_docker.sh && ./install_docker.sh
-
-## (Docker w/o sudo)
-$ sudo usermod -aG docker $USER && newgrp docker
-
-
-## (git clone)
-$ git clone https://github.com/ros/ros_tutorials.git -b foxy-devel
-
-## (Docker Build)
-$ sudo docker build . –t yolov5
-
-## (Docker Run)
-$ sudo docker run –t yolov5
-
-## (remove all containers)
-$ sudo docker rm $(sudo docker ps -a -q)
-
-## (run a disposable new container)
-(To run a disposable new container / run it without --rm for no disposable)
-(--rm 옵션, 일회성으로 실행)
-$ docker run --rm -it --entrypoint bash <image-name-or-id>
-
-
-## (to enter a running container)
-(-it 컨테이너를 종료하지 않고, 터미널의 입력을 계속해서 컨테이너로 전달하기 위해서 사용)
-$ docker exec -it <container-name-or-id> bash
-
-## (Run Out_Docker Nodes)
-$ source ~/robot_ws/install/setup.bash
-$ ros2 run ros2_yolov5 img_publisher
-$ ros2 run ros2_yolov5 img_subscriber
-
-
+## Install Nav2
+export ROS_DISTRO=jazzy
+sudo apt update
+sudo apt install ros-$ROS_DISTRO-cartographer ros-$ROS_DISTRO-cartographer-ros ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-nav2-bringup ros-$ROS_DISTRO-rmw-cyclonedds-cpp
+sudo apt install ros-$ROS_DISTRO-dynamixel-sdk

@@ -2,6 +2,7 @@
 
 ## Launch Simulation World
 ```shell
+source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export TURTLEBOT3_MODEL=burger
@@ -10,6 +11,7 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 
 ## Run Navigation Node - w/ Navigation2
 ```shell
+source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export TURTLEBOT3_MODEL=burger
@@ -22,6 +24,7 @@ ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:
 
 - Run Teleoperation Node (to precisely locate)
 ```shell
+source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export TURTLEBOT3_MODEL=burger
