@@ -1,5 +1,9 @@
 # KIMe-Tutorials for Yolov5 + ROS2 Tutorials
 
+## Install Cheese for Camera Viewer
+```bash
+sudo snap install cheese
+```
 
 ## Install uv
 ```bash
