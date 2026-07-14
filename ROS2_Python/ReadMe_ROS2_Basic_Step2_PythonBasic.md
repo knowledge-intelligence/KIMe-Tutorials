@@ -1,21 +1,21 @@
 # ROS2 패키지 기초 (Python - Topic)
 
 ## Linux CMD 파일 메니져
-```shell
+```bash
 mc
 # or
 mcedit
 ```
 
 ## 1. 패키지 생성
-```shell
+```bash
 mkdir -p ~/robot_ws/src
 cd ~/robot_ws/src
 ros2 pkg create my_first_ros_rclpy_pkg --build-type ament_python --dependencies rclpy std_msgs
 ```
 
 ## 2. 패키지 설정
-```shell
+```bash
 cd ~/robot_ws/src/my_first_ros_rclpy_pkg
 mcedit setup.py
 # or
@@ -62,7 +62,7 @@ setup(
 ```
 
 ## 3. 퍼블리셔 노드 작성
-```shell
+```bash
 cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 mcedit helloworld_publisher.py
 # or
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 ```
 
 ## 4. 서브스크라이버 노드 작성
-```shell
+```bash
 cd ~/robot_ws/src/my_first_ros_rclpy_pkg/my_first_ros_rclpy_pkg
 mcedit helloworld_subscriber.py
 # or
@@ -150,16 +150,16 @@ if __name__ == '__main__':
 ```
 
 ## 5. 빌드
-```shell
+```bash
 cd ~/robot_ws && colcon build --symlink-install --packages-select my_first_ros_rclpy_pkg
 ```
 
 ## 6. 실행
-```shell
+```bash
 source ~/robot_ws/install/local_setup.bash
 ros2 run my_first_ros_rclpy_pkg helloworld_subscriber
 ```
-```shell
+```bash
 source ~/robot_ws/install/local_setup.bash
 ros2 run my_first_ros_rclpy_pkg helloworld_publisher
 ```

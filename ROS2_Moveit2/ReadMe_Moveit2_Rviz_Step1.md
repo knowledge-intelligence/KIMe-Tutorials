@@ -11,25 +11,25 @@
 
 
 ## Make Workspace & Download Panda Resource
-```shell
+```bash
 mkdir -p ~/ws_moveit2/src
 cd ~/ws_moveit2/src
 git clone --branch humble https://github.com/moveit/moveit_resources.git
 ```
 ## Run Moveit Setup Assistant for "panda_moveit_config"
-```shell
+```bash
 ros2 launch moveit_setup_assistant setup_assistant.launch.py
 ```
 Tutorial(Humble) - MoveIt Setup Assistant.pdf
 
 ## Build
-```shell
+```bash
 cd ~/ws_moveit2
 colcon build --packages-select moveit_resources_panda_moveit_config
 ```
 
 ## Run Launch (Panda Moveit2 RViz)
-```shell
+```bash
 cd ~/ws_moveit2
 source install/local_setup.sh
 ros2 launch moveit_resources_panda_moveit_config demo.launch.py
@@ -38,7 +38,7 @@ ros2 launch moveit_resources_panda_moveit_config demo.launch.py
 
 ## Run Launch (Kinova Gen3 Moveit2 RViz) - Not Tested
 https://github.com/Kinovarobotics/ros2_kortex
-```shell
+```bash
 mkdir -p ros2_kortex_ws/src
 cd ros2_kortex_ws/src
 git clone https://github.com/Kinovarobotics/ros2_kortex.git src/ros2_kortex

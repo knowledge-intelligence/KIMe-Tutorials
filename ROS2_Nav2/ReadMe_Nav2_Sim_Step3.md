@@ -1,7 +1,7 @@
 # Simulation[ROS2 - Humble] - Step 3 (Turtlebot3 Gazebo Navigation - NAV2)
 
 ## Launch Simulation World
-```shell
+```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -10,7 +10,7 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
 ## Run Navigation Node - w/ Navigation2
-```shell
+```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -23,7 +23,7 @@ ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:
 - Using "2D Pose Estimate" Button (Important !!!)
 
 - Run Teleoperation Node (to precisely locate)
-```shell
+```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
