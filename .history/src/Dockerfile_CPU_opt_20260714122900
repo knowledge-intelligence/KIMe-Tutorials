@@ -1,0 +1,58 @@
+# GPU 없이 CPU만으로 yolov5를 실행하기 위한 이미지 (Dockerfile_optimized 의 CPU 버전)
+# ROS2 Humble이 이미 설치되어 있는 공식 이미지를 그대로 사용
+#
+# ★ CPU 실행 ★
+# 이 이미지는 CUDA 를 사용하지 않는다. torch 도 CPU 전용 휠로 설치하므로
+# --gpus all 없이 그대로 실행하면 된다.
+#   예) docker run --rm -it <이미지이름>
+# 노드는 torch.cuda.is_available()==False 를 감지해 자동으로 CPU 로 추론한다.
+FROM ros:humble
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 이 패키지(ament_python)를 빌드/실행하는 데 실제로 필요한 패키지만 설치
+# (git, wget: 빌드 시점에 yolov5 소스/가중치를 받기 위해 추가)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-pip \
+    git \
+    wget \
+    python3-colcon-common-extensions \
+    ros-humble-cv-bridge \
+    ros-humble-rmw-cyclonedds-cpp \
+    && rm -rf /var/lib/apt/lists/*
+
+# torch/torchvision 을 CPU 전용 휠로 먼저 설치하여, ultralytics 가 CUDA 빌드
+# (수 GB)을 끌어오지 않도록 한다. → 이미지 용량 대폭 감소
+RUN pip install --no-cache-dir torch torchvision \
+        --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir -U ultralytics "numpy<2" pandas tqdm seaborn scipy
+
+# ---------------------------------------------------------------------------
+# 실행 시 인터넷에서 저장소/가중치를 받는 문제를 없애기 위해,
+# yolov5 소스 저장소와 사전학습 가중치를 "빌드 시점"에 미리 준비한다.
+# 노드 코드는 이 경로(YOLOV5_REPO / YOLOV5_WEIGHTS)를 source='local' 로 로드한다.
+# ---------------------------------------------------------------------------
+ENV YOLOV5_REPO=/app/yolov5
+ENV YOLOV5_WEIGHTS=/app/yolov5s.pt
+RUN git clone --depth 1 https://github.com/ultralytics/yolov5 ${YOLOV5_REPO} && \
+    wget -q https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5s.pt \
+        -O ${YOLOV5_WEIGHTS}
+
+# create a basic workspace
+WORKDIR /app/kime_ws
+
+COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
+RUN pip install --upgrade "packaging>=22.0"
+RUN colcon build
+
+RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
+    echo 'source /app/kime_ws/install/setup.bash' >> ~/.bashrc
+
+ENV ROS_DOMAIN_ID=1
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV PYTHONWARNINGS="ignore::FutureWarning"
+
+# begin the node
+ENTRYPOINT ["/bin/bash", "-c", "export ROS_DOMAIN_ID=1 && ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
+# Run bash
+CMD ["bash"]

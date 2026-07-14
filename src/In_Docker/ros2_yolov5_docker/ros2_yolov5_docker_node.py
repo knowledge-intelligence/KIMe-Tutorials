@@ -1,3 +1,4 @@
+import os
 import torch
 import rclpy
 from rclpy.node import Node
@@ -28,9 +29,19 @@ class ImageSubscriber(Node):
         # ROS Image 메시지 <-> OpenCV 이미지 변환 유틸리티
         self.br = CvBridge()
 
-        # torch.hub를 통해 ultralytics/yolov5 저장소에서 사전학습된 yolov5s 모델을 로드.
-        # (컨테이너 빌드 시 함께 복사된 yolov5s.pt 가중치 파일을 활용)
-        self.model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
+        # GPU 사용 가능 여부를 자동 감지하여 device 선택.
+        # (docker run 시 --gpus all 로 컨테이너를 띄워야 CUDA 가 인식된다)
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.get_logger().info(f"Using device: {self.device}")
+
+        # 오프라인 로드: 빌드 시점에 clone 한 yolov5 소스와 복사/다운로드한 가중치를
+        # source='local' 로 로드하여, 실행 시 인터넷에서 저장소/가중치를 받지 않는다.
+        # 경로는 Dockerfile 의 환경변수(YOLOV5_REPO / YOLOV5_WEIGHTS)로 주입된다.
+        yolov5_repo = os.environ.get('YOLOV5_REPO', '/app/yolov5')
+        weights = os.environ.get('YOLOV5_WEIGHTS', '/app/yolov5s.pt')
+        self.model = torch.hub.load(
+            yolov5_repo, 'custom', path=weights, source='local')
+        self.model.to(self.device)
         self.get_logger().info("Node Initialized")
 
     def listener_callback(self, data):
@@ -41,8 +52,10 @@ class ImageSubscriber(Node):
         current_frame = self.br.imgmsg_to_cv2(data)
 
         # GPU 연산 시 자동 혼합 정밀도(FP16/FP32 자동 전환)를 사용해
-        # 추론 속도를 높이고 메모리 사용량을 줄인다. (CUDA 사용 가능 환경 전용)
-        with torch.amp.autocast(device_type='cuda'):
+        # 추론 속도를 높이고 메모리 사용량을 줄인다.
+        # CPU 환경에서는 autocast(cuda)가 불필요/오류를 유발하므로 enabled 플래그로 끈다.
+        with torch.inference_mode(), \
+                torch.amp.autocast(device_type='cuda', enabled=(self.device == 'cuda')):
             # 이미지를 모델에 통과시켜 객체 탐지 수행
             processed_image = self.model(current_frame)
         #results = self.br.cv2_to_imgmsg(processed_image.ims[0]) # Original Img
