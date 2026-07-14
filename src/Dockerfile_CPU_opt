@@ -7,6 +7,7 @@
 #   예) docker run --rm -it <이미지이름>
 # 노드는 torch.cuda.is_available()==False 를 감지해 자동으로 CPU 로 추론한다.
 FROM ros:jazzy
+# FROM osrf/ros:jazzy-desktop-full
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -17,15 +18,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     wget \
     python3-colcon-common-extensions \
-    ros-humble-cv-bridge \
-    ros-humble-rmw-cyclonedds-cpp \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # torch/torchvision 을 CPU 전용 휠로 먼저 설치하여, ultralytics 가 CUDA 빌드
 # (수 GB)을 끌어오지 않도록 한다. → 이미지 용량 대폭 감소
-RUN pip install --no-cache-dir torch torchvision \
+RUN pip install --no-cache-dir --break-system-packages torch torchvision \
         --index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir -U ultralytics "numpy<2" pandas tqdm seaborn scipy
+RUN pip install --no-cache-dir --break-system-packages -U ultralytics "numpy<2" pandas tqdm seaborn scipy
 
 # ---------------------------------------------------------------------------
 # 실행 시 인터넷에서 저장소/가중치를 받는 문제를 없애기 위해,
@@ -42,10 +43,9 @@ RUN git clone --depth 1 https://github.com/ultralytics/yolov5 ${YOLOV5_REPO} && 
 WORKDIR /app/kime_ws
 
 COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
-RUN pip install --upgrade "packaging>=22.0"
 RUN colcon build
 
-RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
+RUN echo 'source /opt/ros/jazzy/setup.bash' >> ~/.bashrc && \
     echo 'source /app/kime_ws/install/setup.bash' >> ~/.bashrc
 
 ENV ROS_DOMAIN_ID=1
@@ -53,9 +53,8 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV PYTHONWARNINGS="ignore::FutureWarning"
 
 # begin the node
-ENTRYPOINT ["/bin/bash", "-c", "\
-    source /opt/ros/humble/setup.bash && \
-    source install/setup.bash && \
-    ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
-# Run bash
-CMD ["bash"]
+# begin the node
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["ros2", "run", "ros2_yolov5_docker", "ros2_yolov5_docker_node"]

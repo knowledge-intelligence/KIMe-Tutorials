@@ -2,13 +2,14 @@
 # (nvidia/cuda 베이스 + ROS2 수동 설치 과정 불필요)
 #
 # ★ GPU 실행 주의 ★
-# ros:humble 은 CUDA 이미지가 아니므로, GPU 를 쓰려면 다음이 모두 필요하다.
+# ros:jazzy 은 CUDA 이미지가 아니므로, GPU 를 쓰려면 다음이 모두 필요하다.
 #   1) 호스트에 NVIDIA 드라이버 + nvidia-container-toolkit 설치
 #   2) 컨테이너를 반드시 --gpus all 로 실행
 #        예) docker run --gpus all ...
 #   토치(+cuXXX 빌드)가 자체 CUDA 런타임을 포함하므로, 위 두 조건만 맞으면
-#   베이스가 ros:humble 이어도 torch.cuda.is_available() == True 가 된다.
+#   베이스가 ros:jazzy 이어도 torch.cuda.is_available() == True 가 된다.
 FROM ros:jazzy
+# FROM osrf/ros:jazzy-desktop-full
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,11 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     wget \
     python3-colcon-common-extensions \
-    ros-humble-cv-bridge \
-    ros-humble-rmw-cyclonedds-cpp \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir -U ultralytics "numpy<2" pandas tqdm seaborn scipy
+RUN pip install --no-cache-dir --break-system-packages -U ultralytics "numpy<2" pandas tqdm seaborn scipy
 
 # ---------------------------------------------------------------------------
 # 실행 시 인터넷에서 저장소/가중치를 받는 문제를 없애기 위해,
@@ -40,20 +41,17 @@ RUN git clone --depth 1 https://github.com/ultralytics/yolov5 ${YOLOV5_REPO} && 
 WORKDIR /app/kime_ws
 
 COPY ./In_Docker /app/kime_ws/ROS2_Yolov5_Docker
-RUN pip install --upgrade "packaging>=22.0"
 RUN colcon build
 
-RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && \
+RUN echo 'source /opt/ros/jazzy/setup.bash' >> ~/.bashrc && \
     echo 'source /app/kime_ws/install/setup.bash' >> ~/.bashrc
 
 ENV ROS_DOMAIN_ID=1
-ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV PYTHONWARNINGS="ignore::FutureWarning"
 
 # begin the node
-ENTRYPOINT ["/bin/bash", "-c", "\
-    source /opt/ros/humble/setup.bash && \
-    source install/setup.bash && \
-    ros2 run ros2_yolov5_docker ros2_yolov5_docker_node"]
-# Run bash
-CMD ["bash"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["ros2", "run", "ros2_yolov5_docker", "ros2_yolov5_docker_node"]

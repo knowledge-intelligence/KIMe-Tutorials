@@ -73,6 +73,15 @@ class ImagePublisher(Node):
       ret, frame = self.cap.read()
 
     if ret == True:
+      # 프레임을 가로 640px 기준으로 축소합니다.
+      # 원본 종횡비를 유지하도록 세로 크기도 비례해서 계산합니다.
+      target_width = 640
+      h, w = frame.shape[:2]
+      if w > target_width:
+        target_height = int(h * target_width / w)
+        frame = cv2.resize(frame, (target_width, target_height),
+                           interpolation=cv2.INTER_AREA)
+
       # 이미지를 퍼블리시합니다.
       # 'cv2_to_imgmsg' 메서드는 OpenCV
       # 이미지를 ROS 2 이미지 메시지로 변환합니다

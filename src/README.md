@@ -1,5 +1,9 @@
-# ROS2 Yolov5 Docker Tutorial (Humble Tested)
+# ROS2 Yolov5 Docker Tutorial (Jazzy Tested)
 
+## Install cyclonedds
+```bash
+sudo apt install -y ros-jazzy-rmw-cyclonedds-cpp
+```
 
 ## Modify ROS Domain ID
 ```bash
@@ -27,7 +31,7 @@ sudo docker build -f ./Dockerfile_opt . -t yolov5
 ```
 - CPU
 ```bash
-cd ~/yolo_ws
+cd ~/yolo_ws/src
 sudo docker build -f ./Dockerfile_CPU_opt . -t yolov5_cpu
 ```
 
@@ -39,15 +43,27 @@ xhost +local:docker
 sudo docker run --rm -it \
   --net=host \
   --ipc=host \
+  --pid=host \
   --gpus all \
   -e DISPLAY=$DISPLAY \
   -e ROS_DOMAIN_ID=1 \
-  -e RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
+  -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   -v /tmp/runtime-user:/tmp/runtime-user \
-  -v ~/yolo_ws:/root/yolo_ws \
   --name yolov5-docker \
   yolov5
+
+
+sudo docker run --rm -it \
+  --net=host \
+  --ipc=host \
+  --pid=host \
+  --gpus all \
+  -e ROS_DOMAIN_ID=1 \
+  -e RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
+  --name yolov5-docker \
+  yolov5 \
+  bash
 ```
 
 
@@ -88,7 +104,7 @@ colcon build --symlink-install --packages-select ros2_yolov5
 source /opt/ros/jazzy/setup.bash
 source ~/yolo_ws/src/install/setup.bash
 export ROS_DOMAIN_ID=1
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ros2 run ros2_yolov5 img_publisher --ros-args -p source:="/home/Administrator/yolo_ws/assets/TestVideo1.mp4"
 ```
 
@@ -108,7 +124,7 @@ ros2 run ros2_yolov5 img_publisher --ros-args -p source:="/path/to/video.mp4"
 source /opt/ros/jazzy/setup.bash
 source ~/yolo_ws/src/install/setup.bash
 export ROS_DOMAIN_ID=1
-export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ros2 run ros2_yolov5 img_subscriber
 ```
 
@@ -133,10 +149,10 @@ docker run --rm -it --entrypoint bash \<image-name-or-id\>
 docker run --rm -it --entrypoint bash yolov5
 
 
-  source /opt/ros/humble/setup.bash
-  source install/setup.bash
-  export ROS_DOMAIN_ID=1
-  export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+export ROS_DOMAIN_ID=1
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ```
 
 ## to enter a running container
