@@ -133,3 +133,5 @@ dmypy.json
 # TFormer pt files
 *.pt
 events.out.tfevents*
+
+.history
