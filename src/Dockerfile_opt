@@ -8,7 +8,7 @@
 #        예) docker run --gpus all ...
 #   토치(+cuXXX 빌드)가 자체 CUDA 런타임을 포함하므로, 위 두 조건만 맞으면
 #   베이스가 ros:humble 이어도 torch.cuda.is_available() == True 가 된다.
-FROM ros:humble
+FROM ros:jazzy
 
 ENV DEBIAN_FRONTEND=noninteractive
 

@@ -88,6 +88,7 @@ colcon build --symlink-install --packages-select ros2_yolov5
 source /opt/ros/jazzy/setup.bash
 source ~/yolo_ws/src/install/setup.bash
 export ROS_DOMAIN_ID=1
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 ros2 run ros2_yolov5 img_publisher --ros-args -p source:="/home/Administrator/yolo_ws/assets/TestVideo1.mp4"
 ```
 
@@ -107,6 +108,7 @@ ros2 run ros2_yolov5 img_publisher --ros-args -p source:="/path/to/video.mp4"
 source /opt/ros/jazzy/setup.bash
 source ~/yolo_ws/src/install/setup.bash
 export ROS_DOMAIN_ID=1
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 ros2 run ros2_yolov5 img_subscriber
 ```
 
@@ -129,6 +131,12 @@ docker exec -it yolov5-docker nvidia-smi
 ```bash
 docker run --rm -it --entrypoint bash \<image-name-or-id\>
 docker run --rm -it --entrypoint bash yolov5
+
+
+  source /opt/ros/humble/setup.bash
+  source install/setup.bash
+  export ROS_DOMAIN_ID=1
+  export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 ```
 
 ## to enter a running container

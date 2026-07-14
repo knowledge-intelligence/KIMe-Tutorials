@@ -6,7 +6,7 @@
 # --gpus all 없이 그대로 실행하면 된다.
 #   예) docker run --rm -it <이미지이름>
 # 노드는 torch.cuda.is_available()==False 를 감지해 자동으로 CPU 로 추론한다.
-FROM ros:humble
+FROM ros:jazzy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
