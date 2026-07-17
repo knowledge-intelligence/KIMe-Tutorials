@@ -362,8 +362,10 @@ serve_reasoner() {
   info "OpenAI 호환 엔드포인트: http://localhost:${port}/v1"
   info "미디어 루트: ${COSMOS3_MEDIA_ROOT}"
 
+  # venv/bin 을 PATH 앞에 둬야 flashinfer JIT 가 subprocess 로 ninja 를 찾을 수 있음
   run env \
     CUDA_VISIBLE_DEVICES="${devices}" \
+    PATH="${REASONER_VENV}/bin:${PATH}" \
     HF_HOME="${HF_HOME}" \
     ${HF_TOKEN:+HF_TOKEN="${HF_TOKEN}"} \
     "${REASONER_VENV}/bin/vllm" serve "${repo}" \
@@ -398,7 +400,11 @@ serve_generator() {
       extra=( --tensor-parallel-size "${tp}" --enable-layerwise-offload )
     fi
 
-    run docker run --rm -it --runtime nvidia "${gpu_arg[@]}" \
+    # TTY 가 없는 환경(nohup/CI)에서 -t 는 실패하므로 조건부로만 붙임
+    local tty_arg=( -i )
+    [[ -t 0 ]] && tty_arg=( -it )
+
+    run docker run --rm "${tty_arg[@]}" --runtime nvidia "${gpu_arg[@]}" \
       -e CUDA_DEVICE_ORDER=PCI_BUS_ID \
       ${HF_TOKEN:+-e HF_TOKEN="${HF_TOKEN}"} \
       -v "${HF_HOME}:/root/.cache/huggingface" \
@@ -421,6 +427,7 @@ serve_generator() {
 
     run env \
       CUDA_VISIBLE_DEVICES="$(seq -s, 0 $((tp - 1)))" \
+      PATH="${GENERATOR_VENV}/bin:${PATH}" \
       HF_HOME="${HF_HOME}" \
       ${HF_TOKEN:+HF_TOKEN="${HF_TOKEN}"} \
       "${GENERATOR_VENV}/bin/vllm" serve "${repo}" \

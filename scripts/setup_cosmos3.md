@@ -9,6 +9,11 @@ NVIDIA Cosmos3 의 **Reasoner** 를 vLLM 으로, **Generator** 를 vLLM-Omni 로
 
 > **주의:** 이 스크립트는 설치와 서버 기동까지를 담당합니다. 이 문서를 작성한 환경(RTX A6000 48GB × 1)에서는
 > VRAM 이 부족하여 **전체 모델 로드/추론 테스트는 수행하지 않았습니다.** 아래 "검증 범위" 절을 확인하세요.
+>
+> 이후 RTX PRO 6000 96GB × 1 환경에서 모델 로드/추론까지 전부 검증했습니다 — [8-1절](#8-1-추가-검증-2026-07-17-rtx-pro-6000-blackwell-96gb--1) 참고.
+
+**설치 후 실행/추론 방법은 [`run_cosmos3.md`](./run_cosmos3.md), 검증 결과는
+[`cosmos3-experiments/RESULTS.md`](./cosmos3-experiments/RESULTS.md) 에 정리되어 있습니다.**
 
 ```bash
 curl -LsSf https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/main/scripts/setup_cosmos3.sh | bash -s install all
@@ -206,6 +211,7 @@ uv pip install --torch-backend=cu130 "vllm>=0.23.0"
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 \
+PATH="$COSMOS3_ROOT/venv-reasoner/bin:$PATH" \
 vllm serve nvidia/Cosmos3-Nano \
   --tensor-parallel-size 1 \
   --mm-encoder-tp-mode data \
@@ -214,6 +220,10 @@ vllm serve nvidia/Cosmos3-Nano \
   --media-io-kwargs '{"video": {"num_frames": -1}}' \
   --port 8000
 ```
+
+> `PATH` 에 venv 의 `bin` 을 넣는 것은 선택이 아니라 **필수**입니다. flashinfer 가 JIT 컴파일 단계에서
+> `ninja` 를 subprocess 로 실행하는데, PATH 에 없으면 모델 로드가 끝난 뒤
+> `FileNotFoundError: 'ninja'` 로 엔진 초기화가 실패합니다.
 
 Super 는 `CUDA_VISIBLE_DEVICES=0,1,2,3` + `--tensor-parallel-size 4` 로 바뀝니다.
 
@@ -232,6 +242,7 @@ uv pip install --torch-backend=cu130 \
 ### Generator 실행 (Nano, Docker)
 
 ```bash
+# -it 는 TTY 가 있을 때만 (nohup/CI 백그라운드 실행이면 -i 만 사용)
 docker run --rm -it --runtime nvidia --gpus device=0 \
   -e CUDA_DEVICE_ORDER=PCI_BUS_ID \
   -v "${HF_HOME}:/root/.cache/huggingface" \
@@ -318,6 +329,26 @@ curl -sS -X POST http://localhost:8001/v1/infer \
 즉 **명령 조립과 환경 점검까지는 검증되었고, 모델 로드 이후는 미검증**입니다.
 GPU 가 충분한 환경에서 처음 실행할 때는 `check` → `install --dry-run` → `install` 순서로 진행하세요.
 
+### 8-1. 추가 검증 (2026-07-17, RTX PRO 6000 Blackwell 96GB × 1)
+
+위 미검증 항목을 별도 환경에서 **전부 실행하여 확인했습니다.** 상세 결과는
+[`cosmos3-experiments/RESULTS.md`](./cosmos3-experiments/RESULTS.md), 실행 절차는
+[`run_cosmos3.md`](./run_cosmos3.md) 를 참고하세요.
+
+- 실제 설치 (`install all`), 가중치 다운로드(약 30GB), 두 서버 기동 — **성공**
+- Reasoner: 텍스트 추론 / 이미지 추론(멀티모달) — **성공** (VRAM 약 95GB)
+- Generator: text-to-video 189프레임 1280×720 생성 — **성공** (VRAM 약 37GB, 6분 5초)
+
+이 과정에서 원본 스크립트/문서 그대로는 두 컴포넌트 모두 기동에 실패했으며, 다음이 필요했습니다:
+
+1. **Reasoner** — `serve` 시 PATH 에 venv 의 `bin` 추가 (`ninja` 탐색 실패 방지) — 스크립트 반영됨
+2. **Generator** — TTY 없는 환경에서 `docker run -t` 제거 — 스크립트 반영됨
+3. **Generator** — 공식 이미지에 `cosmos-guardrail` 이 없어 기동 거부됨 → 파생 이미지 필요 ([`run_cosmos3.md`](./run_cosmos3.md) 3-1절)
+4. **`example generator` 미동작** — 스크립트는 `/v1/infer` + `b64_video` 를 가정하나 실제 API 는 `/v1/videos/sync` multipart + mp4 바이너리 ([`run_cosmos3.md`](./run_cosmos3.md) 3-4절)
+
+> **GPU 1장 환경 주의**: Reasoner(95GB) 와 Generator(37GB) 는 96GB 1장에서 **동시 실행이 불가능**합니다.
+> 한쪽을 내리고 다른 쪽을 올리는 순차 방식으로 사용하세요.
+
 ---
 
 ## 9. 트러블슈팅
@@ -326,6 +357,8 @@ GPU 가 충분한 환경에서 처음 실행할 때는 `check` → `install --dr
 | --------------------------------- | ------------------------------------------------------------------ |
 | `uv 를 찾을 수 없습니다`                  | `curl -LsSf https://astral.sh/uv/install.sh \| sh` 후 셸 재시작         |
 | `docker nvidia 런타임이 보이지 않습니다`     | nvidia-container-toolkit 설치 후 `sudo systemctl restart docker`      |
+| Reasoner 기동 중 `FileNotFoundError: [Errno 2] No such file or directory: 'ninja'` | flashinfer 가 JIT 컴파일 시 `ninja` 를 **subprocess 로** 호출하는데, venv 를 활성화하지 않고 `venv/bin/vllm` 을 직접 실행하면 venv 의 `bin` 이 PATH 에 없어 찾지 못함. 스크립트는 `serve` 시 `PATH="${VENV}/bin:${PATH}"` 를 넣어 해결함 — 수동 실행 시에도 동일하게 PATH 를 잡거나 venv 를 activate 할 것 |
+| `docker run` 이 `the input device is not a TTY` 로 실패 | `-t` 는 TTY 가 있어야 함. `nohup`/CI/백그라운드 실행에는 `-t` 를 붙이면 안 됨. 스크립트는 `[[ -t 0 ]]` 로 TTY 를 감지해 있을 때만 `-it`, 없으면 `-i` 만 사용 |
 | 게이트 리포 401/403                    | `export HF_TOKEN=...` 및 HF 웹에서 `nvidia/Cosmos-1.0-Guardrail` 접근 승인 |
 | CUDA/torch 버전 불일치                 | `--torch-backend cu128` 로 강제 지정                                    |
 | OOM                               | `--model nano` 사용, Super 는 GPU 4장 필요                               |
