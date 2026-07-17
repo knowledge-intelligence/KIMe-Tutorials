@@ -5,6 +5,10 @@ Isaac Lab 2.3.2 + Isaac Sim 5.1을 **pip 방식**으로 자동 설치하는 스�
 
 기반 문서: [Isaac Lab 2.3.2 Pip Installation](https://isaac-sim.github.io/IsaacLab/v2.3.2/source/setup/installation/pip_installation.html)
 
+```bash
+curl -LsSf https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/main/setup_isaaclab_pip.sh | bash -s isaaclab
+```
+
 ---
 
 ## 1. 사용법

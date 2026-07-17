@@ -11,7 +11,7 @@ NVIDIA Cosmos3 의 **Reasoner** 를 vLLM 으로, **Generator** 를 vLLM-Omni 로
 > VRAM 이 부족하여 **전체 모델 로드/추론 테스트는 수행하지 않았습니다.** 아래 "검증 범위" 절을 확인하세요.
 
 ```bash
-curl -LsSf https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/mainsetup_cosmos3.sh | sh
+curl -LsSf https://raw.githubusercontent.com/knowledge-intelligence/KIMe-Tutorials/main/setup_cosmos3.sh | bash -s install all
 ```
 
 ---
