@@ -240,6 +240,38 @@ if [ "$DO_INSTALL" -eq 1 ]; then
     log "pip 업그레이드"
     pip install --upgrade pip
 
+    # 중단된 pip uninstall이 남긴 ~orch, ~unctorch 같은 파편을 정리한다.
+    # 남아 있으면 매 pip 호출마다 "Ignoring invalid distribution" 경고가 나고
+    # import를 방해할 수 있다.
+    SITE_PACKAGES="$(python -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')"
+    LEFTOVERS="$(find "$SITE_PACKAGES" -maxdepth 1 -name '~*' 2>/dev/null | wc -l)"
+    if [ "$LEFTOVERS" -gt 0 ]; then
+        find "$SITE_PACKAGES" -maxdepth 1 -name '~*' -exec rm -rf {} + 2>/dev/null || true
+        ok "중단된 설치 파편 ${LEFTOVERS}개 정리"
+    fi
+
+    # pip 제약 파일. 두 가지 문제를 한 번에 막는다.
+    #
+    # 1) setuptools<81 — flatdict==4.0.1은 sdist만 제공되고 setup.py가 pkg_resources를
+    #    import하는데, setuptools 81+는 pkg_resources를 제거했다. 그대로 두면 빌드 격리
+    #    환경이 최신 setuptools를 받아 "No module named 'pkg_resources'"로 실패한다.
+    #    (제약은 빌드 격리 환경에만 걸리므로 실제 설치되는 패키지 버전은 바뀌지 않는다.)
+    #
+    # 2) torch 고정 — isaaclab_rl이 stable-baselines3>=2.6을 요구하는데 최신 sb3는
+    #    torch>=2.8을 요구한다. 풀어두면 isaaclab.sh -i가 torch를 2.13(+cu13 스택
+    #    수 GB)으로 올렸다가 되돌리면서 torchaudio를 잃는다. 고정해두면 resolver가
+    #    torch 2.7과 맞는 sb3를 고르므로 이 왕복 자체가 없어진다.
+    PIP_CONSTRAINTS="${CONDA_PREFIX}/share/isaaclab-constraints.txt"
+    mkdir -p "$(dirname "$PIP_CONSTRAINTS")"
+    cat > "$PIP_CONSTRAINTS" <<EOF
+setuptools<81
+torch==${TORCH_VERSION}
+torchvision==${TORCHVISION_VERSION}
+torchaudio==${TORCHAUDIO_VERSION}
+EOF
+    export PIP_CONSTRAINT="$PIP_CONSTRAINTS"
+    ok "pip 제약 설정 (setuptools<81, torch ${TORCH_VERSION} 고정)"
+
     log "Isaac Sim ${ISAACSIM_VERSION} 설치 (수십 GB — 시간이 오래 걸립니다)"
     pip install "isaacsim[all,extscache]==${ISAACSIM_VERSION}" --extra-index-url "${NVIDIA_INDEX}"
     ok "Isaac Sim 패키지 $(pip list 2>/dev/null | grep -ci '^isaacsim')개 설치됨"
@@ -253,6 +285,23 @@ if [ "$DO_INSTALL" -eq 1 ]; then
     log "Isaac Lab 의존성 설치 (isaaclab.sh -i)"
     # isaacsim이 starlette 등을 다운그레이드하므로 Isaac Lab 요구 버전으로 되돌린다.
     "${LAB_DIR}/isaaclab.sh" -i
+
+    # isaaclab.sh -i는 모듈을 하나씩 pip install하면서 개별 실패를 무시하고 계속 진행해
+    # 0으로 끝난다. 즉 종료 코드만 믿으면 isaaclab 코어가 빠진 설치를 "성공"으로 오인한다.
+    # 실제로 설치됐는지 직접 확인한다 (--skip-verify와 무관하게 항상).
+    MISSING=""
+    for m in isaaclab isaaclab_assets isaaclab_mimic isaaclab_rl isaaclab_tasks; do
+        pip show "$m" >/dev/null 2>&1 || MISSING="${MISSING} ${m}"
+    done
+    [ -z "$MISSING" ] || die "isaaclab.sh -i가 0을 반환했지만 다음 모듈이 설치되지 않았습니다:${MISSING}
+     위쪽 로그에서 해당 모듈의 pip 실패 원인을 확인하세요."
+    ok "Isaac Lab 모듈 5개 설치 확인"
+
+    # isaaclab.sh -i가 torch 계열을 다시 건드렸을 수 있으므로 cu128 빌드를 다시 못박는다.
+    # (제약을 걸어도 -i가 torchaudio를 지우고 가는 경우가 있어 마지막에 재확인한다.)
+    log "PyTorch cu128 재확인"
+    pip install "torch==${TORCH_VERSION}" "torchvision==${TORCHVISION_VERSION}" \
+                "torchaudio==${TORCHAUDIO_VERSION}" --index-url "${TORCH_INDEX}"
 
     # -----------------------------------------------------------------------
     # 4. conda 활성화 스크립트 설정
@@ -300,10 +349,18 @@ if [ "$DO_VERIFY" -eq 1 ]; then
     python -c "import isaacsim" 2>/dev/null && ok "isaacsim import" || die "isaacsim을 import할 수 없습니다."
     python -c "import isaaclab"  2>/dev/null && ok "isaaclab import"  || die "isaaclab을 import할 수 없습니다."
 
+    # isaacsim-core가 torchaudio==2.7.0을 요구한다. 설치 과정의 torch 교체 와중에
+    # 조용히 사라지는 일이 있어 명시적으로 확인한다.
+    python -c "import torchaudio" 2>/dev/null && ok "torchaudio import" \
+        || die "torchaudio가 없습니다 (isaacsim-core 요구사항). --force로 재실행하세요."
+
     python - <<'PY' || die "torch가 CUDA를 인식하지 못합니다."
 import sys, torch
 print(f"  ✓ torch {torch.__version__} / CUDA {torch.cuda.is_available()}", end="")
 print(f" / {torch.cuda.get_device_name(0)}" if torch.cuda.is_available() else "")
+if "+cu" not in torch.__version__:
+    print(f"  ! torch {torch.__version__}는 CPU 빌드입니다 — cu128 빌드가 아닙니다.")
+    sys.exit(1)
 sys.exit(0 if torch.cuda.is_available() else 1)
 PY
 fi
