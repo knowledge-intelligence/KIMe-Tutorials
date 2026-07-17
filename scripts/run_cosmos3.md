@@ -235,7 +235,6 @@ until curl -sf http://localhost:8001/v1/models >/dev/null 2>&1; do sleep 20; don
 ### 3-4. text-to-video 생성
 
 **엔드포인트는 `/v1/videos/sync` 이고 multipart/form-data 로 보내며 mp4 바이너리를 그대로 반환합니다.**
-(`setup_cosmos3.sh example generator` 가 쓰는 `/v1/infer` + `b64_video` JSON 방식은 현재 이미지에서 동작하지 않습니다 — 5절 참고)
 
 ```bash
 curl -sS -X POST http://localhost:8001/v1/videos/sync \
@@ -252,7 +251,20 @@ curl -sS -X POST http://localhost:8001/v1/videos/sync \
   -o cosmos3_t2v_output.mp4
 ```
 
-준비된 스크립트:
+스크립트 내장 예제 (위 curl 과 동일한 요청):
+
+```bash
+# README 원본 파라미터 (189프레임/35스텝) — 약 6분
+./setup_cosmos3.sh example generator --port 8001
+
+# 빠른 확인 — 약 20초
+./setup_cosmos3.sh example generator --port 8001 --num-frames 29 --steps 20
+```
+
+결과는 `$COSMOS3_OUTPUT_DIR/cosmos3_generator_t2v.mp4` 에 저장되고, `ffprobe` 가 있으면
+코덱/해상도/프레임 수까지 자동 출력합니다.
+
+독립 실행 스크립트도 있습니다:
 
 ```bash
 /Temp/cosmos3-experiments/inputs/generator_t2v_request.sh 8001 out.mp4
@@ -320,7 +332,7 @@ nohup ./setup_cosmos3.sh serve reasoner --model nano --port 8000 > /Temp/reasone
 
 | 항목                                   | 내용                                                                                                       |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `example generator` 가 실패함            | 스크립트는 `/v1/infer` + `.b64_video` JSON 을 가정하지만, 현재 `vllm/vllm-omni:cosmos3` 의 실제 API 는 `/v1/videos/sync` multipart + mp4 바이너리입니다. **3-4 절의 curl 을 쓰세요.** |
+| Generator API 는 `/v1/videos/sync`     | 초기 스크립트는 `/v1/infer` + `.b64_video` JSON 을 가정했으나 실제 API 는 multipart + mp4 바이너리입니다. **`setup_cosmos3.sh` 에 반영 완료** — `example generator` 로 바로 생성됩니다. |
 | Generator 에 `cosmos-guardrail` 필수    | 공식 이미지에 미포함 — 3-1 절로 파생 이미지를 만들어야 기동됩니다.                                                                 |
 | Reasoner 는 PATH 에 venv/bin 필요        | 없으면 `ninja` 를 못 찾아 엔진 초기화 실패.                                                                             |
 | 백그라운드 docker 는 `-t` 금지               | TTY 없으면 `-it` 가 실패.                                                                                       |

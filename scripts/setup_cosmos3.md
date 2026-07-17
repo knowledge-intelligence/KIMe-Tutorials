@@ -293,19 +293,31 @@ print(resp.choices[0].message.content)
 
 ### Generator — text-to-video
 
+엔드포인트는 `/v1/videos/sync` 이며 **multipart/form-data 로 보내고 mp4 바이너리를 그대로 응답**합니다
+(JSON + base64 가 아닙니다).
+
 ```bash
-curl -sS -X POST http://localhost:8001/v1/infer \
-  -H 'Accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "prompt": "A humanoid robot walks through a futuristic warehouse.",
-    "seed": 42,
-    "guidance_scale": 6.0,
-    "steps": 35,
-    "resolution": "256",
-    "num_output_frames": 25,
-    "fps": 24.0
-  }' | jq -r '.b64_video' | base64 -d > out.mp4
+curl -sS -X POST http://localhost:8001/v1/videos/sync \
+  --form-string "prompt=A small warehouse robot moves a blue box across a clean floor." \
+  --form-string "negative_prompt=blurry, distorted, low quality" \
+  --form-string "size=1280x720" \
+  --form-string "num_frames=189" \
+  --form-string "fps=24" \
+  --form-string "num_inference_steps=35" \
+  --form-string "guidance_scale=6.0" \
+  --form-string "flow_shift=10.0" \
+  --form-string "seed=0" \
+  --form-string 'extra_params={"use_resolution_template":false,"use_duration_template":false,"guardrails":true}' \
+  -o out.mp4
+```
+
+스크립트로 동일 요청 (기본값이 위와 같음):
+
+```bash
+./setup_cosmos3.sh example generator --port 8001
+
+# 빠른 확인 (~20초) — 189프레임/35스텝은 6분 이상 걸립니다
+./setup_cosmos3.sh example generator --port 8001 --num-frames 29 --steps 20
 ```
 
 ---
@@ -344,7 +356,8 @@ GPU 가 충분한 환경에서 처음 실행할 때는 `check` → `install --dr
 1. **Reasoner** — `serve` 시 PATH 에 venv 의 `bin` 추가 (`ninja` 탐색 실패 방지) — 스크립트 반영됨
 2. **Generator** — TTY 없는 환경에서 `docker run -t` 제거 — 스크립트 반영됨
 3. **Generator** — 공식 이미지에 `cosmos-guardrail` 이 없어 기동 거부됨 → 파생 이미지 필요 ([`run_cosmos3.md`](./run_cosmos3.md) 3-1절)
-4. **`example generator` 미동작** — 스크립트는 `/v1/infer` + `b64_video` 를 가정하나 실제 API 는 `/v1/videos/sync` multipart + mp4 바이너리 ([`run_cosmos3.md`](./run_cosmos3.md) 3-4절)
+4. **`example generator` 의 API 가 실제와 불일치** — 스크립트가 `/v1/infer` + `b64_video` 를 가정했으나
+   실제 API 는 `/v1/videos/sync` multipart + mp4 바이너리 → 스크립트 반영됨 (7절 참고)
 
 > **GPU 1장 환경 주의**: Reasoner(95GB) 와 Generator(37GB) 는 96GB 1장에서 **동시 실행이 불가능**합니다.
 > 한쪽을 내리고 다른 쪽을 올리는 순차 방식으로 사용하세요.
