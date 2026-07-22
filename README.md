@@ -1,5 +1,7 @@
 # KIMe-Tutorials for Yolov5 + ROS2 Tutorials
 
+[Notion Link](https://kimelab.notion.site/KIMe-Lab-145875de525f80e98d63ff6e6637d037)
+
 ## Install Cheese for Camera Viewer & VSCode
 ```bash
 sudo snap install cheese
